@@ -181,48 +181,94 @@
 	
 	<!-- 도서리스트 출력, 카테고리 조건에 따라 출력내용이 다를 수 있음  (사용안함)  -->
 	<select id="bookList" parameterType="pagination" resultType="book">
-		
-		SELECT 
-		        rownum as rn, b_num, b_name, 
-		        to_char(b_date, 'YYYY"년" MM"월" dd"일"') as b_date, b_author,
-		        b_pub, b_price, b_state,
-		        cateOne_num, cateTwo_num,
-		        ra_sum, ra_count,
-		        listcover_imgurl,
-		        salescnt
-		FROM (
+		<if test="b_sort == 'new' or b_sort == 'old' or b_sort == 'highPrice' or b_sort == 'lowPrice'">
+				SELECT 
+				        rn,
+				        salescnt,b_num, b_name, 
+				        to_char(b_date, 'YYYY"년" MM"월" dd"일"') as b_date, b_author,
+				        b_pub, b_price, b_state,
+				        cateOne_num, cateTwo_num,
+				        ra_sum, ra_count,
+				        listcover_imgurl
+				FROM (
+				    SELECT		
+						<if test="b_sort =='new'">	
+				        	/*+ INDEX_DESC(r rating_pk) INDEX_DESC(b book_pk) INDEX_DESC(i bookimg_pk) */
+						</if>			
+						<if test="b_sort =='old'">	
+				        	/*+ INDEX_ASC(r rating_pk) INDEX_ASC(b book_pk) INDEX_ASC(i bookimg_pk) */
+						</if>		
+						<if test="b_sort =='lowPrice'">
+        					/*+ INDEX_ASC(r rating_pk) INDEX_ASC(b book_b_price_index) INDEX_ASC(i bookimg_pk) */
+						</if>
+						<if test="b_sort =='highPrice'">
+        					/*+ INDEX_DESC(r rating_pk) INDEX_DESC(b book_b_price_index) INDEX_DESC(i bookimg_pk) */
+						</if>
+				        rownum rn,
+				        salescnt, b.b_num, b_name, 
+				        b_date, b_author,
+				        b_pub, b_price, b_state,
+				        cateOne_num, cateTwo_num,
+				        ra_sum, ra_count,
+				        listcover_imgurl
+				    FROM
+				        book b INNER JOIN bookimg i
+				    ON 
+				        b.b_num = i.b_num
+				    INNER JOIN
+				        rating r
+				    ON
+				        b.b_num = r.b_num
+				    <![CDATA[ WHERE rownum <= #{lastRownum}
+				]]>
+					<include refid="bookListWhere"></include>
+				)
+				<![CDATA[
+		        WHERE
+		        	rn >= #{startRownum}
+		    ]]>
+		</if>
+		<if test="b_sort == 'best'">
 		    SELECT 
-		        /*+ INDEX_ASC(book book_pk) */
-		        min(rownum) as inlineViewRowNum,
-		        b.b_num, b_name, 
-		        b_date, b_author,
-		        b_pub, b_price, b_state,
-		        cateOne_num, cateTwo_num,
-		        ra_sum, ra_count,
-		        listcover_imgurl,
-		        nvl(sum(p.pd_qty), 0) as salescnt
-		    FROM
-		        book_view b LEFT OUTER JOIN pdetail p
-		    ON 
-		        b.b_num = p.b_num
-			<where>
-		        <![CDATA[
-			        b.b_num > 0
-			        AND
-			        rownum <= #{lastRownum}
-		        ]]>
-		        <include refid="bookListWhere"></include>
-			</where>
-		    GROUP BY 
-		        b.b_num, b_name, 
-		        b_date, b_author,
+		        brn,
+		        salescnt, r.b_num, b_name, 
+		        to_char(b_date, 'YYYY"년" MM"월" dd"일"'), b_author,
 		        b_pub, b_price, b_state,
 		        cateOne_num, cateTwo_num,
 		        ra_sum, ra_count,
 		        listcover_imgurl
-			<include refid="bookListOrderBy"></include>
-			    ) bookList
-			<![CDATA[WHERE inlineViewRownum >= #{startRownum}]]>
+		    FROM
+		        bookimg i 
+		    INNER JOIN (select 
+		                    rownum brn, b.b_num, ra_sum, ra_count, salescnt ,
+		                    b_name, b_date, b_author,
+		                    b_pub, b_price, b_state,
+		                    cateOne_num, cateTwo_num
+		            from book b inner join (
+		                select
+		                    /*+ INDEX_DESC(r rating_salescnt_index) */ 
+		                    rownum rrn, b_num, ra_sum, ra_count, salescnt
+		                from
+		                    rating r
+		            ) r
+		            on b.b_num = r.b_num
+		           <![CDATA[ 
+		           	WHERE 
+		           		rownum <= #{lastRownum}
+		           	]]>
+					<include refid="bookListWhere"></include>
+		           	<![CDATA[
+		            ORDER BY 
+		            	salescnt desc
+		            ) r
+		    ON i.b_num = r.b_num
+		    WHERE
+		        i.b_num > 0
+		    AND
+		        brn >= #{startRownum}
+		        order by salescnt desc
+		    ]]>
+		</if>
 	</select>
 	
 	<select id="bookBestList" parameterType="pagination">

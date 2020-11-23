@@ -3,6 +3,7 @@ package com.dev24.admin.book.controller;
 import java.util.List;
 import java.util.Map;
 
+import org.junit.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -44,6 +45,7 @@ public class AdminBookController {
 	 * @param listRange
 	 * @param model
 	 */
+	@Test
 	@RequestMapping(value = "/{category}", method = RequestMethod.GET)
 	public String adminBookList(
 			@PathVariable String category,
@@ -57,7 +59,7 @@ public class AdminBookController {
 			Model model
 	) {
 		
-		log.info("bookList 호출 성공");
+		log.info("adminbookList 호출 성공");
 
 		int cateOne_num = 0;
 		int cateTwo_num = 0;
@@ -80,6 +82,7 @@ public class AdminBookController {
 		// 얻어낸 pagination객체를 통해 bookList() 호출
 		List<BookVO> bList = bookService.bookList(pagination);
 		log.info(pagination.toString());
+//		log.info(bList.get(0).toString());
 
 		model.addAttribute("pagination", pagination);
 		model.addAttribute("bList", bList);

@@ -15,4 +15,7 @@ public interface NeDAO {
 	
 	//insert
 	public int neInsert (NeVO nevo);
+	
+	//update
+	public int neReadCnt(int ne_num);
 }

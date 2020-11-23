@@ -13,8 +13,10 @@ import com.dev24.client.necmt.dao.NecmtDAO;
 import com.dev24.common.file.FileUploadUtil;
 
 import lombok.Setter;
+import lombok.extern.log4j.Log4j;
 
 @Service
+@Log4j
 public class NeServiceImpl implements NeService{
 
 	@Setter(onMethod_ = @Autowired)
@@ -30,8 +32,18 @@ public class NeServiceImpl implements NeService{
 	}
 	
 	@Override
-	public NeVO neDetail(int ne_num) {
-		NeVO nvo = neDAO.neDetail(ne_num);
+	@Transactional
+	public NeVO neDetail(int ne_num, String from) {
+		NeVO nvo;
+		if (from.equals("admin")) {
+			nvo = neDAO.neDetail(ne_num);
+		} else if (from.equals("client")) {
+			neDAO.neReadCnt(ne_num);
+			nvo = neDAO.neDetail(ne_num);
+		} else {
+			log.info("from 은 \"admin\" 또는 \"client\"만 가능합니다.");
+			nvo = null;
+		}
 		return nvo;
 	}
 	

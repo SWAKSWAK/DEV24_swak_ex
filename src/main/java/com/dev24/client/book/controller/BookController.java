@@ -58,6 +58,7 @@ public class BookController {
 		List<BookVO> bookList = bookService.bookList(pagination);
 		
 		log.info(pagination.toString());
+//		log.info("client: " + bookList.get(0).toString());
 		
 		model.addAttribute("pagination", pagination);
 		model.addAttribute("bookList", bookList);

@@ -167,10 +167,11 @@
 						}
 					}
 				});
-	
+				
 				$(".nextBtn").click(function(){
 					if(startPage+10 <= pageLength){
 						$("#startPage").val(startPage+10);
+						startPage = $("#startPage").val();
 						$("#page").val(startPage);
 						goURL(category);
 					}
@@ -339,7 +340,7 @@
 				<input type="hidden" name="pageLength" id="pageLength" value="${pagination.pageLength}" />
 				<input type="hidden" name="range" id="range" value="${pagination.range}" />
 				<input type="hidden" name="listRange" id="listRange" value="${pagination.listRange}" />
-				<input type="hidden" name="b_sort" id="b_sort" value="" />
+				<input type="hidden" name="b_sort" id="b_sort" value="${pagination.b_sort}" />
 				<input type="hidden" name="b_stateKeyword" id="b_stateKeyword" value="${pagination.b_stateKeyword}" />
 				<input type="hidden" name="b_searchKeyword" id="b_searchKeyword" value=""/>
 				<input type="hidden" name="b_searchSelect" id="b_searchSelect" value=""/>
@@ -432,22 +433,22 @@
 								<a class="nav-link sort active" href="#">높은 가격순</a>
 							</li>
 						</ul>
-						<button type="button" class="btn btn-default pull-right updateBookStateBtn" id="selectedOOP" value="outOfPrint" >절판</button>
-						<button type="button" class="btn btn-default pull-right updateBookStateBtn" id="selectedREG" value="reg" >등록</button>
-						<button type="button" class="btn btn-default pull-right updateBookStateBtn" id="selectedREG" value="soldOut" >품절</button>
+						<button type="button" class="btn btn-primary pull-right updateBookStateBtn" id="selectedOOP" value="outOfPrint" >절판</button>
+						<button type="button" class="btn btn-primary pull-right updateBookStateBtn" id="selectedREG" value="reg" >등록</button>
+						<button type="button" class="btn btn-primary pull-right updateBookStateBtn" id="selectedREG" value="soldOut" >품절</button>
 					</div>
 				</div><!-- bottom -->
 			</div> <!-- contentHeader -->
 			<h1 id="listTitle"></h1>
 			<table class="listWrap table table-hover">
 				<colgroup>
-					<col width="4%"/>
-					<col width="40%"/>
+					<col width="9%"/>
+					<col width="34%"/>
 					<col width="20%"/>
 					<col width="10%"/>
 					<col width="11%"/>
 					<col width="5%"/>
-					<col width="4%"/>
+					<col width="5%"/>
 					<col width="5%"/>
 					<col width="1%"/>
 				</colgroup>

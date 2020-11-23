@@ -46,7 +46,7 @@ public class NeController {
 	public String neDetail(int ne_num, Model model) {
 		log.info("neDetail 호출 완료");
 		
-		NeVO nvo = neService.neDetail(ne_num);
+		NeVO nvo = neService.neDetail(ne_num, "client");
 		log.info(nvo);
 		model.addAttribute("nvo", nvo);
 		

@@ -539,6 +539,7 @@
 				$(".nextBtn").click(function(){
 					if(startPage+10 <= pageLength){
 						$("#startPage").val(startPage+10);
+						startPage = $("#startPage").val();
 						$("#page").val(startPage);
 						goURL(category);
 					}
@@ -775,7 +776,7 @@
 			<form id="goURL" name="goURL">
 				<input type="hidden" name="page" id="page" value="${pagination.page}"/>
 				<input type="hidden" name="startPage" id="startPage" value="${pagination.startPage}" />
-				<input type="hidden" name="endPage" id="endPage" value="${pagination.endPage}" />
+				<%-- <input type="hidden" name="endPage" id="endPage" value="${pagination.endPage}" /> --%>
 				<input type="hidden" name="pageLength" id="pageLength" value="${pagination.pageLength}" />
 				<input type="hidden" name="range" id="range" value="${pagination.range}" />
 				<input type="hidden" name="listRange" id="listRange" value="${pagination.listRange}" />

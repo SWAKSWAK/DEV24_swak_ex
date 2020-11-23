@@ -20,6 +20,15 @@
 			) n
 	</select>
 	
+	<update id="neReadCnt">
+		UPDATE 
+			neboard
+		SET
+			ne_readcnt = ne_readcnt + 1
+		WHERE
+			ne_num = #{ne_num}
+	</update>
+	
 	<!-- 공지사항&이벤트 상세페이지 출력 -->
 	<select id="neDetail" parameterType="int" resultType="ne">
 		SELECT

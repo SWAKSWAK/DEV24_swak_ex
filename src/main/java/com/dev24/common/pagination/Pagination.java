@@ -1,7 +1,9 @@
 package com.dev24.common.pagination;
 
 import lombok.Data;
+import lombok.extern.log4j.Log4j;
 
+@Log4j
 @Data
 public class Pagination {
 
@@ -60,7 +62,7 @@ public class Pagination {
 		this.listRange = listRange;
 		this.b_stateKeyword = b_stateKeyword;
 		this.b_sort = b_sort;
-		this.endPage = this.startPage + this.range - 1;
+		this.endPage = startPage + this.range - 1;
 
 		// 한 페이지에 출력될 첫번째 상품 rownum
 		// 예: 1페이지의 minRownum은 1이므로 (1-1)*10+1==1
@@ -74,18 +76,22 @@ public class Pagination {
 		this.bookLength = bookLength;
 
 		// 페이지 길이
-		if (bookLength%10 > 0)
+		if (bookLength%20 > 0)
 			this.pageLength = bookLength / listRange + 1;
 		else
 			this.pageLength = bookLength / listRange;
-
+		
 		// QuerySring으로 startPage 값을 받았다면
 		if (startPage != 0) {
 			this.startPage = startPage;
 		}
-		this.endPage = (int)(Math.ceil((double)this.page/range) * range);
+//		this.endPage = (int)(Math.ceil((double)this.page/range) * range);
+		log.info("Math.ceil((double)this.page/range) * range: " + "Math.ceil((double)*" + this.page + "/" + range + "*" + range + "=" + this.endPage);
+		
 		if(endPage > pageLength)
 			this.endPage = pageLength;
+		log.info("endPage: " + this.endPage + ", pageLength: " + pageLength);
+		log.info("if(endPage > pageLength) : " + (endPage > pageLength));
 		
 		// 이전버튼을 활성화 시킬지 여부
 		// startRownum 이 1보다 낮으면 더이상 이전도서가 없다는 뜻

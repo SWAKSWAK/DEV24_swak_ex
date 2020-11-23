@@ -42,7 +42,7 @@ public class AdminNeController {
 	public String neDetail (@RequestParam("ne_num") Integer ne_num, Model model) {
 		log.info("neDetail ȣ�� �Ϸ�");
 		
-		NeVO nvo = neService.neDetail(ne_num);
+		NeVO nvo = neService.neDetail(ne_num, "admin");
 		
 		model.addAttribute("nvo", nvo);
 		
