@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dev24.client.freeboard.dao.FreeBoardDAO">
+
+<sql id="boardSearch">
+	<if test="search=='fb_title'">
+			<![CDATA[ upper(fb_title) LIKE '%' || upper(#{keyword}) || '%']]>
+	</if>
+			
+			<if test="search=='fb_author'">
+				<![CDATA[ upper(fb_author) LIKE '%' || upper(#{keyword}) || '%']]>
+			</if>
+			
+			<if test="search=='fb_content'">
+				<![CDATA[ upper(fb_content) LIKE '%' || upper(#{keyword}) || '%']]>
+			</if>
+			
+			<if test="search=='fb_num'">
+				<![CDATA[ upper(fb_num) LIKE '%' || upper(#{keyword}) || '%']]>
+	</if>
+</sql>
+	
+	
+	<!-- <select id="freeboardList" parameterType="freeboard" resultType="freeboard">
+		
+			select fb_num, fb_author, fb_title, fb_readcnt, fb_content, 
+			fb_writeday, c_num, fb_img_url, fb_readcnt, 
+			(select count(fb_num) from freecmt where fb_num=freeboard.fb_num) as r_cnt        
+			from freeboard 
+			
+			검색 기능 추가 
+			
+			<where>
+				<if test="search=='fb_title'">
+					<![CDATA[ upper(fb_title) LIKE '%' || upper(#{keyword}) || '%']]>
+				</if>
+				
+				<if test="search=='fb_author'">
+					<![CDATA[ upper(fb_author) LIKE '%' || upper(#{keyword}) || '%']]>
+				</if>
+				
+				<if test="search=='fb_content'">
+					<![CDATA[ upper(fb_content) LIKE '%' || upper(#{keyword}) || '%']]>
+				</if>
+				
+				<if test="search=='fb_num'">
+					<![CDATA[ upper(fb_num) LIKE '%' || upper(#{keyword}) || '%']]>
+				</if>
+				
+			</where>
+			
+			order by fb_num desc
+	</select> -->
+	
+	
+	<select id="freeboardList" parameterType="freeboard" resultType="freeboard">
+		
+		<![CDATA[
+		select 
+			fb_num, fb_author, fb_title, fb_readcnt ,fb_writeday, 
+			(select count(fbc_num) from freecmt where fb_num=boardlist.fb_num) as r_cnt
+		from 
+			(
+			select /*+INDEX_DESC(freeboard freeboard pk)*/ 
+				rownum as rnum, fb_num, fb_author, fb_title, fb_writeday, fb_readcnt 
+			from freeboard
+			where ]]>
+			
+			<trim prefix="(" suffix=") AND" prefixOverrides="AND">
+				<include refid="boardSearch"></include>
+			</trim> 
+			
+			<![CDATA[
+			rownum <= #{pageNum} * #{amount}
+			) boardlist
+			where rnum > (#{pageNum}-1) * #{amount}
+			]]>
+			
+			order by fb_num desc
+		
+	</select>
+	
+	<select id="freeboardListCnt" parameterType="freeboard" resultType="int">
+		SELECT count(*) FROM freeboard
+		<trim prefix="where (" suffix=")">
+			<include refid="boardSearch"></include>
+		</trim>
+	</select>
+	
+	
+	<update id="updateFBReadCount" parameterType="int">
+		update freeboard set fb_readcnt = fb_readcnt+1 where fb_num=#{fb_num}
+	</update>
+	
+	<select id="freeboardDetail" parameterType="freeboard" resultType="freeboard">
+		select fb_num, fb_author, fb_title, fb_content, fb_img_url, fb_readcnt, fb_writeday, c_num
+		 from freeboard where fb_num=#{fb_num}
+	</select>
+	
+	<insert id="freeboardInsert" parameterType="freeboard">
+		insert into freeboard 
+		(fb_num, fb_author, fb_title, fb_readcnt, fb_content, fb_writeday, c_num)
+		values 
+		(fb_num_seq.nextval, #{fb_author}, #{fb_title}, 0, #{fb_content}, sysdate, #{c_num})
+	</insert>
+	
+	<delete id="freeboardDelete" parameterType="freeboard">
+		delete from freeboard where fb_num=#{fb_num}
+	</delete>
+	
+	<update id="freeboardUpdate" parameterType="freeboard">
+		update freeboard  set fb_title= #{fb_title} , fb_content=#{fb_content} where fb_num=#{fb_num}
+	</update>
+	
+</mapper>

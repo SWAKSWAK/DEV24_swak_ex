@@ -1,0 +1,121 @@
+#content_wrap{
+    width: 1200px;
+    margin: 0 auto;
+}
+
+#review_wrap{
+    width: 90%;
+    margin: 0 auto;
+    border: 1px solid #959595;
+    margin-top: 20px;
+}
+
+/************************************************/
+
+#review_tab > div{
+    width: calc(100% / 3);
+    float: left;
+    padding: 20px 0px;
+    text-align: center;
+    letter-spacing: 5px;
+    cursor: pointer;
+    background-color: #a6b1e1;
+    border-right: 1px solid #777;
+    color: #fff;
+    box-sizing: border-box;
+}
+
+#review_tab > div.on{
+	background-color: transparent;
+	color: #959595;
+	text-decoration: underline;
+}
+
+#review_tab > div:last-child{
+    border-right: none;
+}
+
+#review_tab:after{
+    display: block;
+    clear: both;
+    content: '';
+}
+
+#ordeBy{
+    float: right;
+    margin: 10px 0px;
+}
+
+#ordeBy > li{
+    float: left;
+    cursor: pointer;
+}
+
+#ordeBy > li:after{
+    content: ' | ';
+    display: inline-block;
+    margin: 0px 10px;
+}
+
+#ordeBy > li:last-child:after{
+    content: '';
+}
+
+#ordeBy:after{
+    display: block;
+    clear: both;
+    content: '';
+}
+
+#paging{
+    padding: 10px;
+}
+
+/************************************************/
+
+table {
+    border-spacing: 0;
+    border-collapse: collapse;
+    box-sizing: border-box;
+    border: none;
+}
+
+.table {
+    width: 100%;
+    text-align: center;
+    margin: 15px auto 15px;
+}
+
+
+.table tr > th{
+    border-right: 1px solid #959595;
+    border-left: 1px solid #959595;
+    background-color: #eee;
+}
+
+.table tr > td{
+    text-align: left;
+    padding: 10px 0px 10px 10px;
+}
+
+.tr_revcmtInsert, .tr_revcmt{
+    background-color: #eee;
+}
+
+.tr_revcmtInsert input{
+    width: 80%;
+    
+}
+
+.revcmtInsertBtn{
+    width: 18%;
+}
+
+.revcmt_wrap{
+    width: 90%;
+    margin: 0 auto;
+}
+
+.revcmt{
+    margin-bottom: 20px;
+}

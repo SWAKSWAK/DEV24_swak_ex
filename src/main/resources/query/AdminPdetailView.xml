@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dev24.admin.pdetail.dao.PdetailDaoAdmin">
+
+	<!-- 해당 구매번호에 해당하는 구매 상세 내용 조회 -->
+	<select id="pdetailList" parameterType="adminPdetail" resultType="adminPdetail">
+		select p_num, pd_num, b_num, b_name, c_num,
+		c_id, p_pmethod, pd_price, to_char(p_buydate, 'YYYY-MM-DD') as p_buydate, pd_orderstate, rf_num, pd_qty
+		from pdetail_view
+		where p_num = #{p_num}
+
+		<if test="search=='pd_num'">
+			<![CDATA[AND (pd_num LIKE '%'||#{keyword}||'%')]]>
+		</if>
+		<if test="search=='b_num'">
+			<![CDATA[AND (b_num LIKE '%'||#{keyword}||'%')]]>
+		</if>
+		<if test="search=='b_name'">
+			<![CDATA[AND (b_name LIKE '%'||#{keyword}||'%')]]>
+		</if>
+		<if test="search=='pd_orderstate'">
+			<![CDATA[AND (pd_orderstate LIKE '%'||#{keyword}||'%')]]>
+		</if>
+		<if test="search=='rf_num'">
+			<![CDATA[AND (rf_num LIKE '%'||#{keyword}||'%')]]>
+		</if>
+		order by pd_num
+		
+	</select>
+	
+
+</mapper>

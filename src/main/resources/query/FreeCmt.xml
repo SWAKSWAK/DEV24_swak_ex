@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dev24.client.freeboard.freecmt.dao.FreeCmtDAO">
+
+	<select id="freeCmtList" parameterType="freecmt" resultType="freecmt">
+		select freecmt.fbc_num, customer.c_nickname as fbc_author, freecmt.fbc_content, freecmt.fbc_writeday, 
+		freecmt.fb_num, freecmt.c_num 
+		from freecmt 
+		inner join 
+		customer 
+		on freecmt.c_num=customer.c_num
+		where fb_num=#{fb_num} order by fbc_num desc
+	</select>
+	
+	<insert id="freeCmtInsert" parameterType="freecmt">
+		insert into freecmt 
+		(fbc_num, fbc_author, fbc_content, fbc_writeday, fb_num, c_num) 
+		values 
+		(FBC_NUM_SEQ.nextval, #{fbc_author}, #{fbc_content}, sysdate, #{fb_num}, #{c_num})
+
+	</insert>
+	
+</mapper>

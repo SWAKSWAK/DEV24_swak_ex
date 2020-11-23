@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dev24.client.refund.dao.RefundDAO">
+	<!-- 환불 폼 화면 - purchase 정보 -->
+	<select id="getPurchaseInfo" parameterType="purchase" resultType="purchase">
+		select p_num, p_sender, p_price, p_zipcode, p_address, p_pmethod, p_receiver,
+		 p_senderphone, p_receivephone, c_num, p_buydate
+		from purchase
+		where p_num = #{p_num}
+	</select>
+	
+	<!-- 환불 폼 화면 - 구매 도서 정보 -->
+	<select id="getRefundItems" parameterType="orderhistory" resultType="orderhistory">
+		select p_num, order_history_view.b_num, order_history_view.b_name, pd_qty, c_num, p_sender,
+		 p_receiver, pd_price, pd_price/pd_qty as singlePrice, listcover_imgurl, pd_num
+		from order_history_view
+		    inner join book
+		    on order_history_view.b_num = book.b_num
+		    inner join bookimg
+		    on book.b_num = bookimg.b_num
+		where p_num = #{p_num} and book.b_num = #{b_num}
+	</select>
+	
+	<!-- 환불신청완료 -->
+	<insert id="refundInsert" parameterType="refund">
+		insert into refund(rf_num, rf_reason, rf_price, rf_confirmdate, c_num, b_num, rf_qty, rf_orderstate)
+		values (#{rf_num}, #{rf_reason}, #{rf_price}, sysdate, #{c_num}, #{b_num}, #{rf_qty}, #{rf_orderstate})
+	</insert>
+	
+</mapper>

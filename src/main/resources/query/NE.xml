@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dev24.client.ne.dao.NeDAO">
+
+	<!-- 공지사항&이벤트 리스트 출력 -->
+	<select id="neList" resultType="ne">
+		SELECT
+			ne_num, ne_readcnt, ne_title, 
+			ne_date, ne_cate,
+			(select count(*) from necmt c where c.ne_num = n.ne_num) as ne_rcnt
+		FROM
+			(
+			SELECT
+				/*+ INDEX_DESC(ne neboard_pk)*/
+				rownum rn,
+				ne_num, ne_readcnt, ne_title, 
+				ne_date, ne_cate
+			FROM
+				neboard ne
+			) n
+	</select>
+	
+	<!-- 공지사항&이벤트 상세페이지 출력 -->
+	<select id="neDetail" parameterType="int" resultType="ne">
+		SELECT
+			ne_num, ne_readcnt, ne_title, ne_imgurl,
+			ne_date, ne_cate, ne_content
+		FROM
+			neboard
+		WHERE 
+			ne_num = #{ne_num}
+	</select>
+	
+	<!-- 공지사항&이벤트 글 삭제 -->
+	<delete id="neDelete" parameterType="int">
+		DELETE FROM neboard
+		WHERE ne_num = #{ne_num}
+	</delete>
+	
+	<!-- 공지사항&이벤트 글 등록 -->
+	<insert id="neInsert" parameterType="ne">
+		INSERT INTO neboard 
+		(
+			ne_num, ne_title, ne_readcnt, 
+			<if test="ne_imgurl != null">
+   				ne_imgurl, 
+			</if>
+   			
+   			ne_date, ne_content, ne_cate
+		) VALUES (
+			necmt_num_seq.nextval, #{ne_title}, 0, 
+			<if test="ne_imgurl != null">
+				#{ne_imgurl}, 
+			</if>
+			sysdate, #{ne_content}, #{ne_cate}
+		)
+	</insert>
+	
+	
+</mapper>

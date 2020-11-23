@@ -1,0 +1,274 @@
+*{
+    list-style: none;
+    text-decoration: inherit;
+    color: inherit;
+    margin: 0;
+    padding: 0;
+    font-size: 14px;
+    font-family: 'Noto Sans KR', sans-serif;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body{
+    background-color: #fafafa;
+    color:#959595;
+    height: 100%;
+}
+
+#content_wrap{
+    min-height:100%;
+    padding-bottom: 180px;
+}
+
+header{
+    width:100%;
+    height: 130px;
+    border-bottom: 1px solid #cccccc;
+    background-color: #ffffff;
+}
+
+#header_wrap{
+    width: 1200px;
+    height: 100%;
+    margin: 0 auto;
+    position: relative;
+}
+
+#logo{
+    width: 170px;
+    padding: 25px 0px 0px 20px;
+}
+
+#logo img{width:100%;}
+
+/****** gnb *******/
+#gnb{
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    font-size: 14px;
+}
+
+#gnb > li{
+    float: left;
+    width: 25%;
+    text-align: center;
+    height: 40px;
+    line-height: 40px;
+    cursor: pointer;
+}
+
+#gnb li.on{
+    background-color: #a6b1e1;
+    color: #fff;
+}
+
+#gnb > li > a{
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+#gnb > li:hover{
+    background-color: #a6b1e1;
+    color: #fff;
+}
+
+
+/**************** dropmenu ******************/
+
+
+.dropmenu{
+    display: none;
+    background-color: #fff;
+    border: 1px solid #424874;
+    width: 100%;
+    color: #424874;
+    
+    /* 효석 추가내용 */
+    box-sizing: border-box;
+    position: absolute;
+    width: 25%;
+    z-index: 9999;
+}
+
+#gnb > li > ul.on{
+    display: block;
+}
+
+
+.dropmenu > li{
+    height: calc(100% / 5);
+    line-height: 60px;
+    width: 100%;
+    text-align: center;
+}
+
+#gnb .dropmenu > li.on{
+    background-color: #f4eeff;
+    font-weight: bold;
+}
+
+#gnb .dropmenu > li:hover{
+    background-color: #f4eeff/* #f4eeff */;
+    font-weight: bold;
+    color: #424874;
+}
+
+.dropmenu > li > a{
+    display: block;
+    width: 100%;
+}
+
+.bookLink {
+	font-weight: bold;
+	background-color: #dcd6f7;
+}
+
+
+/********** util **********/
+
+#util{
+    font-size: 12px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+#util > li{
+    float: left;
+    margin-right: 10px;
+}
+#util > li:after{
+    content: '|';
+    margin-left: 10px;
+}
+#util > li:last-child{
+    margin-right: 0px;
+}
+#util > li:last-child:after{
+    content: '';
+    margin-left: 0px;
+}
+
+#util > li i{
+    margin-right: 7px;
+    font-size: 14px;
+}
+
+/*********** search 검색 박스 ************/
+#h_search{
+    width: 425px;
+    height: 35px;
+    border: 3px solid #dcd6f7;
+    position: absolute;
+    top: 30px;
+    left: 50%;
+    transform: translate(-50%, 0%);
+}
+
+#h_search > div{
+    float: left;
+    height: 100%;
+}
+
+#h_search input, #h_search select{
+    border : none;
+    height: 100%;
+}
+
+#h_searchmenu{
+    width: 100px;
+    text-indent: 10px;
+}
+
+#h_searchtext{
+    width: 250px;
+    padding-left: 10px;
+}
+
+#h_searchBtn{
+    border: none;
+    width: 65px;
+    height: 36px;
+    background-color: #dcd6f7;
+    color: #ffffff;
+    font-size: 20px;
+    cursor: pointer;
+    float: right;
+    margin-right:-1.5px;
+}
+
+/****************** footer *****************/
+
+footer{
+    border-top: 1px solid #959595; 
+    background-color: #dfdfdf;
+    font-size: 13px;
+    padding-bottom: 20px;
+    position: absolute;
+    bottom: 0;
+    height: 100px;
+    width: 100%;
+}
+
+footer:before{
+    content: '';
+    display: block;
+    height: 35px;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    border-bottom: 1px solid #959595; 
+    z-index: 0;
+}
+
+#footer_wrap{
+    width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+}
+
+#footer_menu > li{
+    float: left;
+    width: calc(100% / 7);
+    height: 35px;
+    line-height: 35px;
+    text-align: center;
+}
+
+#footer_menu:after{
+    content: '';
+    display: block;
+    clear: both;
+}
+
+#footer_logo{
+    width: 150px;
+    position: absolute;
+    right: 250px;
+    bottom: 0px;
+}
+
+#footer_logo img{
+    width: 100%;
+}
+
+#footer_p{
+    margin-top: 20px;
+    margin-left: 250px;
+}
+
+#footer_p p:first-child{
+    font-size: 13px;
+    margin-bottom: 10px;
+}
+
+#footer_p p:last-child{
+    font-size: 10px;
+}

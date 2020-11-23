@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dev24.client.review.dao.ReviewDAO">
+	<sql id="reviewSearch">
+		<if test="reviewType_sort != ''">
+				re_type = #{re_type}
+			</if>
+	</sql>
+
+	<!-- 리뷰 전체 조회(해당 도서번호에 대해) -->
+	<select id="reviewList" parameterType="review" resultType="review">
+		<![CDATA[SELECT re_num, re_score, c_num, c_nickname, to_char(re_writedate, 'YYYY-MM-DD') re_writedate,
+				 re_type, re_content, b_num, pd_num, re_imgurl,
+				  (select count(re_num) from review where re_num=reviewList.re_num) as r_cnt
+				FROM (
+					select /*+INDEX_DESC(review review_pk)*/ 
+					rownum as rnum, re_num, re_score, c_num, c_nickname, re_writedate,  re_type, re_content, b_num, pd_num, re_imgurl
+					from review
+					where]]>
+		
+		 	<trim prefix="(" suffix=") AND" prefixOverrides="AND">
+				<include refid="reviewSearch"></include>
+			</trim> 
+			
+			<![CDATA[
+			rownum <= #{pageNum} * #{amount}
+			) reviewList
+			where b_num = #{b_num} AND rnum > (#{pageNum}-1) * #{amount}
+			]]>
+		
+		<if test="orderby_when=='last'">
+			ORDER BY re_num DESC
+		</if>
+		<if test="orderby_when=='high'">
+			order by re_score desc
+		</if>
+		<if test="orderby_when=='low'">
+			order by re_score
+		</if>
+		
+	</select>
+	
+	<select id="reviewListCnt" parameterType="review" resultType="int">
+		SELECT count(*) FROM review where b_num = #{b_num}
+		<trim prefix="AND (" suffix=")">
+			<include refid="reviewSearch"></include>
+		</trim>
+	</select>
+	
+	
+	<!-- 리뷰작성 폼에서 도서정보 출력 -->
+	<select id="getBookInfo" parameterType="review" resultType="review">
+		select book.b_num, b_name, b_author, b_pub, b_price, listcover_imgurl
+		from book
+		    inner join bookimg
+		    on book.b_num = bookimg.b_num and book.b_num = #{b_num}
+	</select>
+	
+	<!-- 리뷰 작성 -->
+	<insert id="reviewInsert" parameterType="review">
+		insert into review(re_num, re_score, c_num, c_nickname, re_writedate, re_type, re_content, b_num, pd_num, re_imgurl)
+		values(re_num_seq.nextval, #{re_score}, #{c_num}, #{c_nickname}, sysdate, #{re_type}, #{re_content},
+		 #{b_num}, #{pd_num}, #{re_imgurl, jdbcType=VARCHAR})
+	</insert>
+	
+	<!-- 리뷰 작성 시 rating 테이블 값 자동 수정 -->
+	<update id="ratingUpdate" parameterType="review">
+		update rating
+		set ra_sum = ra_sum + #{re_score}, ra_count = ra_count + 1
+		where b_num = #{b_num}
+	</update>
+	
+	<!-- 리뷰 삭제 -->
+	<delete id="reviewDelete" parameterType="review">
+		delete from review where re_num = #{re_num}
+	</delete>
+	
+	<!-- 리뷰 삭제 시 rating 테이블 값 자동 수정 -->
+	<update id="ratingMinus" parameterType="review">
+		update rating
+		set ra_sum = ra_sum - #{re_score}, ra_count = ra_count - 1
+		where b_num = #{b_num}
+	</update>
+	
+	<!-- 리뷰 수정폼 출력 시 리뷰 내용 조회 -->
+	<select id="reviewUpdateForm" parameterType="review" resultType="review">
+		select re_num, re_score, c_num, c_nickname, to_char(re_writedate, 'YYYY-MM-DD') re_writedate,
+		 re_type, re_content, b_num, pd_num, re_imgurl
+		 from review
+		 where re_num = #{re_num}
+	</select>
+	
+	<!-- 리뷰 수정 처리 -->
+	<update id="reviewUpdate" parameterType="review">
+		update review
+		set re_writedate=sysdate, re_content=#{re_content},
+		 re_type=#{re_type}, re_imgurl=#{re_imgurl, jdbcType=VARCHAR}
+		where re_num = #{re_num}
+	</update>
+	
+</mapper>

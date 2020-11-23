@@ -1,0 +1,171 @@
+#content_wrap{
+    width: 1200px;
+    margin: 0 auto;
+}
+
+.cart_wrap{
+    margin-top: 50px;
+}
+
+.tit_cart h3:before{
+    content: '';
+    display: inline-block;
+    width: 7px;
+    height: 20px;
+    background-color: #a6b1e1;
+    margin-right: 10px;
+    border-radius: 5px;
+}
+
+.tit_cart h3{
+    height: 20px;
+    display: inline-block;
+}
+
+table {
+    border-spacing: 0;
+    border-collapse: collapse;
+    box-sizing: border-box;
+    border: none;
+}
+
+.table {
+    width: 100%;
+    text-align: center;
+    margin: 20px 0px;
+    font-size: 14px;
+}
+
+.table thead tr{
+    border-bottom: 2px solid #959595;
+}
+
+.table thead tr th, .table tbody tr td{
+    padding: 10px 0px;
+}
+
+.table tbody tr{
+    border-bottom: 1px solid #959595;
+}
+
+.td_book{
+    text-align: left;
+}
+
+.td_book .td_bookimg{
+    display: block;
+    width: 100px;
+    margin-left: 10px;
+}
+
+.td_book .td_bookimg img{
+    width: 100%;
+}
+
+.td_book span{
+    float: left;
+}
+
+.td_book:after{
+    clear: both;
+    content: '';
+    display: block;
+}
+
+.td_book .td_bookname{
+    margin-left: 10px;
+}
+
+.td_book > span{
+    cursor: pointer;
+}
+.td_book > span:hover{
+    text-decoration: underline;
+}
+
+.checkQty{
+    width: 40px;
+    margin-bottom: 5px;
+}
+
+.td_orderBtn > input:first-child{
+    margin-bottom: 7px;
+}
+
+.lastrow{
+    background-color: #eee;
+    text-align: right;
+}
+
+.lastrow td{
+    padding-right: 10px !important;
+}
+
+
+/*********************************totalprice_wrap***********************************/
+
+#totalprice_wrap{
+    width: 100%;
+    border: 1px solid #959595;
+    margin-top: 60px;
+    margin-bottom: 40px;
+    height: 100px;
+    position: relative;
+}
+
+#totalprice_wrap > div{
+    width: calc(100% / 3);
+    text-align: center;
+    float: left;
+    background-color: #eee;
+    height: 100%;
+}
+
+#totalprice_wrap > div.calc{
+    width: fit-content;
+    height: fit-content;
+    position: absolute;
+    font-size: 30px;
+}
+#totalprice_wrap > div.calc:nth-child(2){
+    top:25px;
+    left:400px;
+}
+#totalprice_wrap > div.calc:nth-child(4){
+    top:25px;
+    left:800px;
+}
+
+
+#totalprice_wrap:after{
+    content: '';
+    clear: both;
+    display: block;
+}
+
+.price_tit{
+    font-size: 17px;
+    margin-top: 22px;
+}
+
+.price_text{
+    font-size: 25px;
+    font-weight: bold;
+}
+
+
+/*********************************btnArea***********************************/
+
+#btnArea{
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+#btnArea > input{
+    width: 200px;
+    height: 50px;
+    font-size: 20px;
+}
+
+
+

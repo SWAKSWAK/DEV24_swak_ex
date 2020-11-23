@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dev24.admin.stock.dao.StockDAO">
+
+	<!--  <select id="stockList" parameterType="stock" resultType="stock">
+		select stock.stk_incp, book.b_name, book.b_author, stock.stk_qty, 
+		stock.stk_salp, book.cateone_num, book.catetwo_num,stock.adm_num, 
+        to_char (stock.stk_regdate, 'YYYY-MM-DD HH24:mm:ss') as stk_regdate
+		from book
+		inner join stock
+		on book.b_num=stock.stk_incp
+	</select> -->
+	
+	
+	<select id="stockList" parameterType="stock" resultType="stock">
+		select stock_list.stk_incp, stock_list.b_name, stock_list.b_author, 
+		stock_list.stk_qty, stock_list.stk_salp, stock_list.cateone_num, stock_list.catetwo_num,
+		stock_list.stk_regdate, admin.adm_name, stock_list.adm_num
+		from stock_list
+		inner join admin
+		on 
+		admin.adm_num=stock_list.adm_num 
+		
+		<!-- 검색기능 추가  -->
+		
+		<where>
+			<if test="search=='b_name'">
+				<![CDATA[ upper(b_name) LIKE '%' || upper(#{keyword}) || '%' ]]>
+			</if>
+			<if test="search=='b_author'">
+				<![CDATA[ upper(b_author) LIKE '%' || upper(#{keyword}) || '%']]>
+			</if>
+			<if test="search=='stk_incp'">
+				<![CDATA[ stk_incp LIKE '%' || #{keyword} || '%']]>
+			</if>
+			
+			<if test="category=='pl'"> catetwo_num=1</if>
+			<if test="category=='osdb'"> catetwo_num=2</if>
+			<if test="category=='webp'"> catetwo_num=3</if>
+			<if test="category=='com'"> catetwo_num=4</if>
+			<if test="category=='net'"> catetwo_num=5</if>
+			<if test="category=='it'"> catetwo_num=6</if>
+			<if test="category=='compt'"> catetwo_num=7</if>
+			<if test="category=='webc'"> catetwo_num=8</if>
+			
+			<if test="stk_regdate!=''">
+				 stk_regdate <![CDATA[ < ]]> #{stk_regdate} 
+			</if>
+			
+		</where>
+		order by stk_incp
+	</select> 
+	
+	
+	<select id="stockBInfoList" parameterType="book" resultType="book">
+		select b_num, b_name, b_author, b_pub from book
+		<where>
+			<if test="b_state=='unreg'">
+				b_state is not null
+			</if>
+		</where>  
+		
+		order by b_num
+	</select>
+	
+	
+	<select id="getStockDetail" parameterType="stockdetail" resultType="stockdetail">
+		select b_num as stk_incp, b_name, b_date, b_author, b_pub, b_price, cateone_num, catetwo_num, listcover_imgurl
+		from stock_book_info 
+		where b_num= #{stk_incp}
+	</select>
+	
+	<insert id="stockInsert" parameterType="stock">
+		insert into stock 
+		(stk_incp, stk_qty, stk_salp, adm_num, b_num)
+		values(#{stk_incp}, #{stk_qty}, #{stk_salp}, #{adm_num}, #{b_num})
+	</insert>
+
+</mapper>

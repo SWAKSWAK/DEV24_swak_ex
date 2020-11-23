@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dev24.client.bookimg.dao.BookImgDAO">
+
+	
+	<select id="bookImgList" parameterType="list" resultType="bookImg">
+		SELECT
+			listcover_imgurl, detailcover_imgurl, detail_imgurl
+		FROM 
+			bookimg
+		ORDER BY b_num
+	</select>
+	
+	<insert id="bookImgInsert" parameterType="bookImg">
+		INSERT INTO
+			bookimg 
+		(
+			b_num 
+			<if test="listcover_imgurl != null and !listcover_imgurl.equals('')">
+				, listcover_imgurl
+			</if>
+			<if test="detailcover_imgurl != null and !detailcover_imgurl.equals('')">
+				, detailcover_imgurl
+			</if>
+			<if test="detail_imgurl != null and !detail_imgurl.equals('')">
+				, detail_imgurl
+			</if>
+		) VALUES (
+			#{b_num}
+			<if test="listcover_imgurl != null and !listcover_imgurl.equals('')">
+				, #{listcover_imgurl,jdbcType=VARCHAR}
+			</if>
+			<if test="detailcover_imgurl != null and !detailcover_imgurl.equals('')">
+				, #{detailcover_imgurl,jdbcType=VARCHAR}
+			</if>
+			<if test="detail_imgurl != null and !detail_imgurl.equals('')">
+				, #{detail_imgurl,jdbcType=VARCHAR}
+			</if>
+		)
+	</insert>
+
+	<update id="bookImgUpdate" parameterType="bookImg" >
+		UPDATE
+			bookimg
+		SET
+			<trim suffixOverrides=",">
+				<if test="listcover_imgurl != null and !listcover_imgurl.equals('')">
+					listcover_imgurl = #{listcover_imgurl,jdbcType=VARCHAR},
+				</if>
+				<if test="detailcover_imgurl != null and !detailcover_imgurl.equals('')">
+					detailcover_imgurl = #{detailcover_imgurl,jdbcType=VARCHAR},
+				</if>
+				<if test="detail_imgurl != null and !detail_imgurl.equals('')">
+					detail_imgurl = #{detail_imgurl,jdbcType=VARCHAR}
+				</if>
+			</trim>
+		WHERE
+			b_num = #{b_num}
+	</update>
+	
+<!-- <update id="addToCart" parameterType="java.util.List">
+		MERGE INTO
+			cart c
+		USING (
+			<foreach collection="list" item="cvo" separator="union all"> 
+				SELECT
+					  #{cvo.b_num} as b_num
+					, #{cvo.crt_price} as crt_price
+					, #{cvo.c_num} as c_num
+					, #{cvo.crt_qty} as crt_qty
+				FROM
+					dual
+			</foreach>
+		) d
+		ON (c.b_num = d.b_num)
+		WHEN MATCHED THEN
+			UPDATE
+			<set>
+				  c.crt_price = c.crt_price + d.crt_price
+				, c.c_num = d.c_num
+				, c.crt_qty = c.crt_qty + d.crt_qty
+			</set>
+		WHEN NOT MATCHED THEN
+			INSERT 
+			 <trim prefix="(" suffix=")" suffixOverrides="," >
+			 	  crt_num
+				, b_num
+				, crt_price
+				, c_num
+				, crt_qty
+			</trim>
+			<trim prefix="values (" suffix=")" suffixOverrides="," >
+				  crt_num_seq.nextval
+				, d.b_num
+				, d.crt_price
+				, d.c_num
+				, d.crt_qty
+			</trim>
+	</update> -->
+	
+</mapper>

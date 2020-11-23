@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dev24.admin.qna.dao.AdminQnaDAO">
+
+<!-- QNA 게시판 리스트 기본 조회 -->
+	<select id="qnaList" parameterType="qna" resultType="qna">
+			SELECT q_num, c_num, q_category, c_nickname, q_title, to_char(q_writedate, 'YYYY/MM/DD') q_writedate
+			, q_readCnt
+			, q_repRoot
+			, q_repStep
+			, q_repIndent 
+			FROM qna
+		<where>
+			<if test="search=='q_title'">
+				<![CDATA[q_title LIKE '%' || #{keyword} ||'%' ]]>
+			</if>
+			<if test="search=='q_category'">
+				<![CDATA[q_category LIKE '%' || #{keyword} ||'%' ]]>
+			</if>
+			<if test="search=='q_content'">
+				<![CDATA[q_content LIKE '%' || #{keyword} ||'%' ]]>
+			</if>
+			<if test="search=='c_nickname'">
+				<![CDATA[c_nickname LIKE '%' || #{keyword} ||'%' ]]>
+			</if>
+		</where>  	
+		ORDER BY q_repRoot desc, q_repStep asc
+	</select>
+
+
+	<!-- Q&A 게시판 글 작성 --> 
+	<insert id="qnaInsert" parameterType="qna">
+		/* Qna - qnaInsert */
+		<selectKey keyProperty="q_num" resultType="int" order="BEFORE">
+			select q_num_seq.nextval from dual
+		</selectKey>
+		INSERT INTO qna(q_num, c_nickname, q_content, q_title, q_category, 
+		q_imgurl,q_writedate, q_repindent,q_reproot,q_repstep, c_num) 
+		VALUES (#{q_num}, #{c_nickname}, #{q_content}, #{q_title}, #{q_category},
+		#{q_imgurl}, sysdate, 0, q_num_seq.currval, 0, #{c_num})
+	</insert> 
+	
+	
+	<!-- Q&A 게시판 상세페이지를 위한 조회 -->
+	<select id="qnaDetail" parameterType="qna" resultType="qna">
+		/*Qna - QnaDetail */
+		SELECT 
+			q_num, c_nickname, q_title, q_content,q_imgurl,q_category,
+			TO_CHAR(q_writedate,'YYYY-MM-DD HH24:MI:SS') AS q_writedate,
+			q_readcnt, q_repRoot, q_repIndent, q_repStep
+		FROM qna
+		WHERE q_num = #{q_num}
+		
+		
+	</select>
+	
+	<!-- Q&A 게시판 readCount() 메서드 -->
+	<update id="qnaCount" parameterType="int">
+	/*Qna - QnaReadCount */
+	UPDATE qna
+	SET
+		q_readcnt = q_readcnt+1
+	WHERE q_num = #{q_num}	 
+	</update>
+	
+	
+	<!-- Q&A 게시물 삭제 -->
+	<delete id="qnaDelete" parameterType="qna" >
+	/* Qna - qnaDelete */
+		DELETE FROM qna WHERE q_num = #{q_num}
+	</delete>
+	
+	<!-- Q&A 게시물 수정 -->
+	<update id="qnaUpdate" parameterType="qna">
+		/* Qna - qnaUpdate */
+		UPDATE qna
+				SET q_title = #{q_title}
+				  , q_content = #{q_content}
+				  , q_writedate = sysdate
+		WHERE q_num = #{q_num}		  
+	</update>
+	
+	<!-- Q&A 게시물 답변글의 repStep 1증가 -->
+	<update id="makeReply" parameterType="qna">
+		UPDATE qna
+				SET q_repStep = q_repStep + 1
+				WHERE q_repRoot = #{q_repRoot}
+				<![CDATA[AND q_repStep > #{q_repStep}]]>
+	</update>
+	
+	<!-- Q&A 게시물 답변글 작성 -->
+	<insert id="replyInsert" parameterType="qna">
+	INSERT INTO qna(q_num, c_nickname, c_num, q_title, q_category, q_content, q_repRoot, q_repStep, q_repIndent)
+			VALUES(q_num_seq.nextval, #{c_nickname}, #{c_num}, #{q_title}, #{q_category}, #{q_content}, #{q_repRoot}, #{q_repStep}+1, #{q_repIndent}+1)
+	
+	</insert>
+
+
+
+
+
+</mapper>

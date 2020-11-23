@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dev24.client.pdetail.dao.PdetailDAO">
+	<!-- 구매완료 후 구매상세 입력 -->
+	<insert id="pdetailInsert" parameterType="java.util.List">
+		insert into pdetail(pd_num, pd_price, pd_orderstate, p_num, c_num, b_num, pd_qty)
+		select pd_num_seq.nextval, p.* from (
+		<foreach collection="list" item="item" separator="union all"> 
+		select
+			#{item.pd_price} pd_price, 'preShipping' pd_orderstate, #{item.p_num} p_num, #{item.c_num} c_num,
+			 #{item.b_num} b_num, #{item.pd_qty} pd_qty
+		from dual
+		</foreach>) p
+	</insert>
+</mapper>

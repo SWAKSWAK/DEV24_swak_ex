@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dev24.client.necmt.dao.NecmtDAO">
+
+	<!-- 공지사항&이벤트 댓글 리스트 출력 -->
+	<select id="necmtList" parameterType="int" resultType="necmt">
+		SELECT
+   			necmt_num, necmt_content, 
+   			c_nickname, necmt_date, c_num, ne_num
+   		FROM
+   			necmt
+   		WHERE
+   			ne_num = #{ne_num}
+	</select>
+	
+	<!-- 공지사항&이벤트 글 삭제 전 댓글 여부 체크 -->
+	<select id="replyCheck" parameterType="int" resultType="int">
+		SELECT
+			count(*)
+		FROM
+			necmt
+		WHERE
+			ne_num = #{ne_num}
+	</select>
+	
+	<insert id="necmtInsert" parameterType="necmt">
+		INSERT INTO necmt (
+			necmt_num, necmt_content, c_nickname, necmt_date, c_num, ne_num
+		) VALUES (
+			necmt_num_seq.nextval, #{necmt_content}, #{c_nickname}, sysdate, #{c_num}, #{ne_num}
+		)
+	</insert>
+	
+	<delete id="necmtDeleteNeNum" parameterType="int">
+		DELETE FROM necmt
+		WHERE ne_num = #{ne_num}
+	</delete>
+	
+	<delete id="necmtDeleteNecmtNum">
+		DELETE FROM necmt
+		WHERE necmt_num = #{necmt_num}
+	</delete>
+</mapper>

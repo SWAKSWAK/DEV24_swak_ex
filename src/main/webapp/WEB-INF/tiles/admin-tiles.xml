@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC
+  "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
+  "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+  
+<tiles-definitions>
+
+	<!-- 메인페이지 -->
+	<definition name="adminIntro" template="/WEB-INF/views/template/admin/adminLayout.jsp">
+		<put-attribute name="title" value="DEV24 Admin page" />
+		<put-attribute name="header" value="/WEB-INF/views/template/admin/header.jsp" />
+		<put-attribute name="menu" value="/WEB-INF/views/template/admin/menu.jsp" />
+		<put-attribute name="adminbody" value="/WEB-INF/views/template/admin/adminMain.jsp" />
+	</definition>
+	
+	<definition name="admin/*" extends="adminIntro">
+		<put-attribute name="title" value="DEV24 관리자페이지 " />
+		<put-attribute name="adminbody" value="/WEB-INF/views/admin/{1}.jsp" /> 
+	</definition>
+	
+	<!-- 일반페이지  -->
+	<definition name="adminContent" template="/WEB-INF/views/template/admin/adminContentLayout.jsp">
+		<put-attribute name="title" value="DEV24Admin page" />
+		<put-attribute name="header" value="/WEB-INF/views/template/admin/header.jsp" />
+		<put-attribute name="body" value="" />
+		<!-- <put-attribute name="body" value="/WEB-INF/views/template/admin/menu.jsp" /> -->
+	</definition>
+	
+	
+		
+</tiles-definitions>

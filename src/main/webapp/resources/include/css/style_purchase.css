@@ -1,0 +1,154 @@
+.purchase_wrap{
+    margin-top: 50px;
+    margin-bottom: 60px;
+}
+
+
+/******************************배송주소 영역**********************************/
+
+#delivery_wrap{
+    width: 100%;
+    margin-bottom: 30px;
+}
+
+#delivery_wrap .t_receiver{
+    width: 65%;
+    float: left;
+}
+#delivery_wrap .t_sender{
+    width: 30%;
+    float: right;
+}
+
+#delivery_wrap:after{
+    clear: both;
+    content: '';
+    display: block;
+}
+
+#delivery_wrap .table{
+    border-top: 2px solid #959595;
+    border-bottom: 2px solid #959595;
+    font-size: 14px;
+}
+
+#delivery_wrap .table tr{
+    height: 50px;
+    border-bottom: 1px solid #959595;
+}
+
+#delivery_wrap .table td{
+    text-align: left;
+    padding-left: 10px;
+}
+
+#delivery_wrap .table th{
+    width: 25%;
+    background-color: #eee;
+}
+
+#delivery_wrap .t_sender th.sender_tit{
+    text-indent: 10px;
+    letter-spacing: 10px;
+    font-size: 16px;
+}
+
+#delivery_wrap .t_receiver tr.tr_address{
+    border-bottom: none;
+}
+
+#del_address_new, #sameAsSender{
+    margin-left: 20px;
+}
+
+#delivery_wrap .table input[type="text"]{
+    height: 25px;
+    text-indent: 3px;
+}
+
+.td_phone > input{
+    width: 60px;
+}
+
+.t_receiver #p_address{
+    width: 400px;
+}
+
+
+/******************************결제방법 영역**********************************/
+
+#payment_wrap{
+    margin-bottom: 30px;
+}
+
+#payment_wrap > ul > li{
+    float: left;
+    font-size: 14px;
+    width: calc(100% / 4 - 5px);
+    border-bottom: 1px solid #959595;
+    border-top: 1px solid #959595;
+    border-left: 1px solid #959595;
+    height: 40px;
+    text-align: center;
+    line-height: 40px;
+}
+
+#payment_wrap > ul > li:last-child{
+    border-right: 1px solid #959595;
+}
+
+#payment_wrap > ul:after{
+    content: '';
+    clear: both;
+    display: block;
+}
+
+#payment_wrap > ul{
+    margin: 20px 0px;
+}
+
+#payment_wrap > ul > li input{
+    margin-right: 10px;
+}
+
+/******************************최종확인 영역**********************************/
+
+#lastcheck_wrap{
+    margin: 20px 0px;
+    width: 100%;
+}
+
+#lastcheck_wrap > div.finalprice{
+    background-color: #ccc;
+    color: #000;
+    font-size: 16px;
+    text-align: right;
+    padding: 15px 15px 15px 0px;
+}
+
+#lastcheck_wrap > div.finalprice > strong, div.finalprice > strong > span{
+    color: darkred;
+    font-size: 24px;
+    margin-left: 20px;
+}
+
+#lastcheck_wrap p{
+    text-align: center;
+    font-size: 13px;
+    margin-top: 10px;
+}
+
+#lastcheck_wrap label{
+    display: block;
+    text-align: center;
+    font-size: 13px;
+    margin-top: 10px;
+}
+
+#purchaseSuccessBtn{
+    margin: 0 auto;
+    display: block;
+    width: 200px;
+    height: 50px;
+    font-size: 22px;
+}

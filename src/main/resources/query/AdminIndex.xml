@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dev24.admin.admin.dao.AdminIndexDAO">
+	
+	<select id="pCount" resultType="int" >
+		select count(p_num) as p_cnt from purchase 
+		where p_buydate >= (select to_date(sysdate, 'YY/MM/DD') from dual)
+	</select>
+	
+	<select id="stkCount" resultType="int">
+		select nvl(sum(stk_qty), 0) from stock
+	</select>
+	
+	<select id="rfCount" resultType="int">
+		select nvl(count(rf_num),0) from refund_view where rf_orderstate!='rfconfirm' 
+		and rf_confirmdate>=(select to_date(sysdate, 'YY/MM/DD') from dual)
+	</select>
+	
+	<select id="salCount" resultType="int">
+		select nvl ((select sum(pd_price) from (select pdetail.pd_price, purchase.p_buydate from purchase inner 
+      join pdetail on pdetail.c_num=purchase.c_num and purchase.p_num=pdetail.p_num where trunc(p_buydate) 
+      = to_date(sysdate, 'yy/mm/dd') and pdetail.pd_orderstate='pConfirm')),0) as state from dual
+	</select>
+	
+	<select id="revCount" resultType="int">
+		select nvl(count(re_num),0) from review where trunc(re_writedate) = to_date(sysdate, 'yy/mm/dd')
+	</select>
+	
+	<select id="qnaCount" resultType="int">
+		select nvl(count(q_num),0) from qna where trunc(q_writedate) = TO_DATE(sysdate,'yy/mm/dd')
+	</select>
+	
+	<select id="neCount" resultType="int">
+		select nvl(count(ne_num),0) from neboard where trunc(ne_date) = TO_DATE(sysdate,'yy/mm/dd')
+	</select>
+	
+	<select id="fbCount" resultType="int">
+		select nvl(count(fb_num),0) from freeboard where trunc(fb_writeday) = TO_DATE(sysdate,'yy/mm/dd')
+	</select>
+	
+	
+</mapper>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dev24.admin.refund.dao.RefundDaoAdmin">
+	
+	<!-- 관리자 페이지 => 환불관리 리스트 출력 -->
+	<select id="refundList" parameterType="adminRefund" resultType="adminRefund">
+		select rf_num, b_num, b_name, c_num, c_id, rf_price, rf_reason,
+		 to_char(rf_confirmdate, 'YYYY-MM-DD') rf_confirmdate, rf_orderstate
+		from refund_view
+		<where>
+			
+			<if test="date_start != ''">
+				<![CDATA[(to_char(rf_confirmdate, 'YYYY-MM-DD') between #{date_start} and #{date_end}) ]]>
+				
+				<if test="search=='rf_num'">
+					<![CDATA[AND (rf_num LIKE '%'||#{keyword}||'%')]]>
+				</if>
+				<if test="search=='b_num'">
+					<![CDATA[AND (b_num LIKE '%'||#{keyword}||'%')]]>
+				</if>
+				<if test="search=='b_name'">
+					<![CDATA[AND (b_name LIKE '%'||#{keyword}||'%')]]>
+				</if>	
+				<if test="search=='c_id'">
+					<![CDATA[AND (c_id LIKE '%'||#{keyword}||'%')]]>
+				</if>
+				<if test="search=='rf_reason'">
+					<![CDATA[AND (rf_reason LIKE '%'||#{keyword}||'%')]]>
+				</if>
+				<if test="search=='rf_orderdate'">
+					<![CDATA[AND (rf_orderdate LIKE '%'||#{keyword}||'%')]]>
+				</if>
+			</if>
+			
+		</where>
+
+		order by rf_confirmdate desc
+	</select>
+	
+	<!-- 환불승인 주문상태 변경 -->
+	<update id="pdetailStateUpdate" parameterType="adminRefund">
+		update pdetail
+		set pd_orderstate = #{rf_orderstate}
+		where pd_num = #{rf_num}
+	</update>
+	<update id="refundStateUpdate" parameterType="adminRefund">
+		update refund
+		set rf_orderstate = #{rf_orderstate}
+		where rf_num = #{rf_num}
+	</update>
+	
+</mapper>

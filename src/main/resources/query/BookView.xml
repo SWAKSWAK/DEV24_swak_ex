@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dev24.client.book.dao.BookDAO">
+	
+	<!-- <select id="getBookListCnt" resultType="int">
+		SELECT
+			count(*) as bookLength
+		FROM
+			book_view
+		<where>
+			<if test="cateOne_num == 0">
+			</if>
+			<if test="cateOne_num == 1">
+				<![CDATA[AND cateOne_num = 1]]>
+			</if>
+			<if test="cateOne_num == 2">
+				<![CDATA[AND cateOne_num = 2]]>
+			</if>
+			<if test="cateTwo_num == 0">
+			</if>
+			<if test="cateTwo_num == 1">
+				<![CDATA[AND cateTwo_num = 1]]>
+			</if>
+			<if test="cateTwo_num == 2">
+				<![CDATA[AND cateTwo_num = 2]]>
+			</if>
+			<if test="cateTwo_num == 3">
+				<![CDATA[AND cateTwo_num = 3]]>
+			</if>
+			<if test="cateTwo_num == 4">
+				<![CDATA[AND cateTwo_num = 4]]>
+			</if>
+			<if test="cateTwo_num == 5">
+				<![CDATA[AND cateTwo_num = 5]]>
+			</if>
+		</where>
+	</select>
+	
+	<select id="bookViewList" parameterType="pagination" resultType="bookView">
+		
+			SELECT 
+				rn, b_num, b_name, b_date, b_author,
+				b_pub, b_price, b_disct,
+				cateOne_num, cateTwo_num, 
+				ra_sum, ra_count,
+				listcover_imgurl, detailcover_imgurl, detail_imgurl
+			FROM (
+			    SELECT 
+			    	rownum rn, b_num, b_name, b_date, b_author,
+					b_pub, b_price, b_disct,
+					cateOne_num, cateTwo_num,
+					ra_sum, ra_count,
+					listcover_imgurl, detailcover_imgurl, detail_imgurl
+			    FROM
+			    	book_view
+				<where>
+			        <![CDATA[
+			        b_num > 0
+			        AND
+			        rownum <= #{lastRownum}
+			        ]]>
+					<if test="cateOne_num == 0">
+					</if>
+					<if test="cateOne_num == 1">
+						<![CDATA[AND cateOne_num = 1]]>
+					</if>
+					<if test="cateOne_num == 2">
+						<![CDATA[AND cateOne_num = 2]]>
+					</if>
+					<if test="cateTwo_num == 0">
+					</if>
+					<if test="cateTwo_num == 1">
+						<![CDATA[AND cateTwo_num = 1]]>
+					</if>
+					<if test="cateTwo_num == 2">
+						<![CDATA[AND cateTwo_num = 2]]>
+					</if>
+					<if test="cateTwo_num == 3">
+						<![CDATA[AND cateTwo_num = 3]]>
+					</if>
+					<if test="cateTwo_num == 4">
+						<![CDATA[AND cateTwo_num = 4]]>
+					</if>
+					<if test="cateTwo_num == 5">
+						<![CDATA[AND cateTwo_num = 5]]>
+					</if>
+				</where>
+			    )
+			<![CDATA[WHERE rn > #{startRownum}]]>
+	</select> -->
+	
+</mapper>

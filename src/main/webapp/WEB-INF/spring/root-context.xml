@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+	<!-- Root Context: defines shared resources visible to all other web components -->
+	
+	<!-- id값도 틀리면 안됨 -->
+	<!-- DB연동을 위한 기본 설정자 -->
+	<bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig">
+	<!-- 로그 출력을 위해 driverClassName을 다음과 같이 설정 -->
+	<!-- <property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" /> -->
+	
+		<property name="driverClassName" value="net.sf.log4jdbc.sql.jdbcapi.DriverSpy" />
+		<property name="jdbcUrl" value="jdbc:log4jdbc:oracle:thin:@localhost:1521:orcl" />
+		<property name="username" value="devuser" />
+		<property name="password" value="dev1234" />
+	</bean>
+	
+	<!-- 커넥션 작업, 커넥션 풀 라이브러리를 얻기 위함-->
+	<!-- hikariConfig를 통해 DB소스객체를 얻기위한 작업 -->
+	<bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
+		<constructor-arg ref="hikariConfig" />
+	</bean>
+	
+	<!-- MyBatis 얻기 작업 -->
+	<!-- dataSource를 통해 MyBatis sql세션 객체를 얻기 위한 작업 -->
+	<bean id="sqlsessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"/>
+		<!-- classpath: .java파일 컴파일 후 저장되는 class파일 경로 (WEB-INF/classes) -->
+		<property name="configLocation" value="classpath:config/mybatis-config.xml"></property>
+		<property name="mapperLocations" value="classpath:query/*.xml"></property>
+	</bean>
+	
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer"> 
+		<property name="basePackage"><value>com.dev24.**.**.dao</value></property>
+	</bean>
+		
+</beans>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dev24.client.login.dao.LoginDAO">
+
+	<select id="userIdSelect" parameterType="String" resultType="login">
+		SELECT
+				c_id,
+				c_num,
+				c_passwd,
+				c_nickname
+		FROM customer
+		WHERE c_id = #{c_id}
+	</select>
+
+	<select id="loginSelect" parameterType="login" resultType="login">
+		/* 로그인 처리 쿼리*/
+		SELECT
+				c_id,
+				c_num,
+				c_passwd,
+				c_nickname
+		FROM customer
+		WHERE c_id = #{c_id} and c_passwd = #{c_passwd}
+	</select>
+		
+
+
+</mapper>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<typeAliases>
+		<typeAlias type="com.dev24.client.cart.vo.CartVO" alias="cart" />
+		<typeAlias type="com.dev24.client.purchase.vo.PurchaseVO" alias="purchase" />
+		<typeAlias type="com.dev24.client.pdetail.vo.PdetailVO" alias="pdetail" />
+		<typeAlias type="com.dev24.client.book.vo.BookVO" alias="book"/>
+		<typeAlias type="com.dev24.client.bookimg.vo.BookImgVO" alias="bookImg"/>
+		<typeAlias type="com.dev24.client.customer.vo.CustomerVO" alias="customer"/>
+		<typeAlias type="com.dev24.admin.stock.vo.StockVO" alias="stock"/>
+		<typeAlias type="com.dev24.admin.stock.vo.StockDetailVO" alias="stockdetail"/>
+		<typeAlias type="com.dev24.admin.admin.vo.AdminVO" alias="admin"/>
+		<typeAlias type="com.dev24.admin.purchase.vo.AdminPurchaseViewVO" alias="adminPurchase"/>
+		<typeAlias type="com.dev24.admin.pdetail.vo.AdminPdetailViewVO" alias="adminPdetail"/>
+		<typeAlias type="com.dev24.common.pagination.Pagination" alias="pagination"/>
+		<typeAlias type="com.dev24.client.refund.vo.RefundVO" alias="refund" />
+		<typeAlias type="com.dev24.client.freeboard.vo.FreeBoardVO" alias="freeboard" />
+		<typeAlias type="com.dev24.client.freeboard.freecmt.vo.FreeCmtVO" alias="freecmt"/>
+		<typeAlias type="com.dev24.client.mypage.orderhistory.vo.OrderhistoryVO" alias="orderhistory"/>
+		<typeAlias type="com.dev24.client.refund.vo.RefundVO" alias="refund"/>
+		<typeAlias type="com.dev24.client.mypage.refundhistory.vo.RefundhistoryVO" alias="refundhistory"/>
+		<typeAlias type="com.dev24.admin.refund.vo.AdminRefundViewVO" alias="adminRefund"/>
+		<typeAlias type="com.dev24.client.review.vo.ReviewVO" alias="review"/>
+		<typeAlias type="com.dev24.client.login.vo.LoginVO" alias="login"/>
+		<typeAlias type="com.dev24.admin.review.vo.AdminReviewViewVO" alias="adminReview"/>
+		<typeAlias type="com.dev24.client.qna.vo.QnaVO" alias="qna"/>
+		<typeAlias type="com.dev24.client.faq.vo.FaqVO" alias="faq"/>
+		<typeAlias type="com.dev24.client.ne.vo.NeVO" alias="ne"/>
+		<typeAlias type="com.dev24.client.necmt.vo.NecmtVO" alias="necmt"/>
+	</typeAliases>
+</configuration>

@@ -1,0 +1,453 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dev24.client.book.dao.BookDAO">
+
+	<resultMap type="book" id="bookResult">
+		<result property="b_list" column="b_list" jdbcType="CLOB" javaType="java.lang.String"/>
+		<result property="b_authorinfo" column="b_authorinfo" jdbcType="CLOB" javaType="java.lang.String"/>
+		<result property="b_info" column="b_info" jdbcType="CLOB" javaType="java.lang.String"/>
+	</resultMap>
+	
+	<!-- where조건에 따른 sql문 -->
+	<sql id="bookListWhere">
+		<if test="cateOne_num == 0">
+		</if>
+		<if test="cateOne_num == 1">
+			<![CDATA[AND cateOne_num = 1]]>
+		</if>
+		<if test="cateOne_num == 2">
+			<![CDATA[AND cateOne_num = 2]]>
+		</if>
+		<if test="cateTwo_num == 0">
+		</if>
+		<if test="cateTwo_num == 1">
+			<![CDATA[AND cateTwo_num = 1]]>
+		</if>
+		<if test="cateTwo_num == 2">
+			<![CDATA[AND cateTwo_num = 2]]>
+		</if>
+		<if test="cateTwo_num == 3">
+			<![CDATA[AND cateTwo_num = 3]]>
+		</if>
+		<if test="cateTwo_num == 4">
+			<![CDATA[AND cateTwo_num = 4]]>
+		</if>
+		<if test="cateTwo_num == 5">
+			<![CDATA[AND cateTwo_num = 5]]>
+		</if>
+		<if test="cateTwo_num == 6">
+			<![CDATA[AND cateTwo_num = 6]]>
+		</if>
+		<if test="cateTwo_num == 7">
+			<![CDATA[AND cateTwo_num = 7]]>
+		</if>
+		<if test="cateTwo_num == 8">
+			<![CDATA[AND cateTwo_num = 8]]>
+		</if>
+		<!-- 등록 -->
+		<if test="b_stateKeyword == 'reg'">
+			AND b_state is null
+		</if>
+		<!-- 등록 과 절판 모두 출력 (사용자 페이지에서는 해당출력) -->
+		<if test="b_stateKeyword == 'regOrOop'">
+			AND b_state is null
+			OR b_state = 'OutOfPrint'
+		</if>
+		<!-- 등록 과 절판 모두 출력 (사용자 페이지에서는 해당출력) -->
+		<if test="b_stateKeyword == 'regOrOopOrSoldOut'">
+			AND b_state is null
+			OR b_state = 'OutOfPrint'
+			OR b_state = 'soldOut'
+		</if>
+		<!-- 미등록 -->
+		<if test="b_stateKeyword == 'unreg'">
+			AND b_state = 'unreg'
+		</if>
+		<!-- 절판 -->
+		<if test="b_stateKeyword == 'outOfPrint'">
+			AND b_state = 'outOfPrint'
+		</if>
+		<!-- 품절 -->
+		<if test="b_stateKeyword == 'soldOut'">
+			AND b_state = 'soldOut'
+		</if>
+		<!-- 명시 안할경우 모두 출력 -->
+		<if test="b_stateKeyword == null or b_stateKeyword == '' or b_stateKeyword == 'all'">
+		</if>
+		<if test="b_searchSelect == ''">
+		</if>
+		<if test="b_searchSelect == 'all'">
+			AND b_name LIKE '%'||#{b_searchKeyword}||'%'
+			OR b_author LIKE '%'||#{b_searchKeyword}||'%'
+			OR b_pub LIKE '%'||#{b_searchKeyword}||'%'
+			OR b_info LIKE '%'||#{b_searchKeyword}||'%'
+		</if>
+		<if test="b_searchSelect == 'b_name'">
+			AND b_name LIKE '%'||#{b_searchKeyword}||'%'
+		</if>
+		<if test="b_searchSelect == 'b_author'">
+			AND b_author LIKE '%'||#{b_searchKeyword}||'%'
+		</if>
+		<if test="b_searchSelect == 'b_pub'">
+			AND b_pub LIKE '%'||#{b_searchKeyword}||'%'
+		</if>
+		<if test="b_searchSelect == 'b_info'">
+			AND b_info LIKE '%'||#{b_searchKeyword }||'%'
+		</if>
+	</sql>
+	
+	<!-- 정렬조건에 따른 sql문
+	<sql id="bookListIndexHint">
+		<if test="b_sort =='new'">
+			/*+ INDEX_DESC(b book_pk) INDEX_DESC(r rating_pk) INDEX_DESC(i bookimg_pk) */
+		</if>
+		<if test="b_sort =='old'">
+			/*+ INDEX_ASC(b book_b_date_index) INDEX_DESC(r rating_pk) INDEX_DESC(i bookimg_pk) */
+		</if>
+		<if test="b_sort =='lowPrice'">
+			/*+ INDEX_ASC(b book_b_price_index) INDEX_DESC(r rating_pk) INDEX_DESC(i bookimg_pk) */
+		</if>
+		<if test="b_sort =='highPrice'">
+			/*+ INDEX_DESC(b book_b_price_index) INDEX_DESC(r rating_pk) INDEX_DESC(i bookimg_pk) */
+		</if>
+		<if test="b_sort =='best'">
+			/*+ INDEX_DESC(b book_pk) INDEX_DESC(r rating_salescnt_index) INDEX_DESC(i bookimg_pk) */
+		</if>
+	</sql> -->
+	
+	<!-- 정렬조건에 따른 sql문 -->		
+	<sql id="bookListOrderBy">		
+		<if test="b_sort =='new'">	
+			ORDER BY				
+				b_date DESC	
+		</if>			
+		<if test="b_sort =='old'">	
+			ORDER BY				
+				b_date ASC	
+		</if>		
+		<if test="b_sort =='lowPrice'">
+			ORDER BY
+				b_price ASC	
+		</if>
+		<if test="b_sort =='highPrice'">
+			ORDER BY
+				b_price DESC	
+		</if>
+		<if test="b_sort == 'best'">
+			ORDER BY
+				salescnt DESC nulls last	
+		</if>
+	</sql>
+	
+	<sql id=""></sql>
+
+	<!-- 시퀀스값 구하기 -->
+	<select id="bookNumber" resultType="int">
+		SELECT
+			b_num_seq.nextval as b_num
+		FROM
+			dual
+	</select>
+	
+	<!-- 도서 등록 -->
+	<insert id="bookInsert" parameterType="book">
+		INSERT INTO 
+			book
+		(
+			b_num, b_name, b_date, b_list, b_author, 
+			b_pub, b_authorinfo, b_info, b_price,
+			catetwo_num, cateone_num,
+			b_state
+		) VALUES (
+			#{b_num}, #{b_name}, #{b_date}, #{b_list,jdbcType=CLOB}, 
+			#{b_author}, #{b_pub}, #{b_authorinfo,jdbcType=CLOB}, 
+			#{b_info,jdbcType=CLOB}, #{b_price}, 
+			#{cateOne_num}, #{cateTwo_num},
+			'unreg'
+		)
+	</insert>
+	
+	<!-- 도서 총 개수 출력, 카테고리 조건에 따라 총개수가 아닐 수 있음 -->
+	<select id="getBookListCnt" parameterType="book" resultType="int">
+		SELECT
+			count(*) as bookLength
+		FROM
+			book b LEFT OUTER JOIN pdetail p
+		ON b.b_num = p.b_num
+		<where>
+	        <include refid="bookListWhere"></include>
+		</where>
+	</select>
+	
+	<!-- 도서리스트 출력, 카테고리 조건에 따라 출력내용이 다를 수 있음  (사용안함)  -->
+	<select id="bookList" parameterType="pagination" resultType="book">
+		
+		SELECT 
+		        rownum as rn, b_num, b_name, 
+		        to_char(b_date, 'YYYY"년" MM"월" dd"일"') as b_date, b_author,
+		        b_pub, b_price, b_state,
+		        cateOne_num, cateTwo_num,
+		        ra_sum, ra_count,
+		        listcover_imgurl,
+		        salescnt
+		FROM (
+		    SELECT 
+		        /*+ INDEX_ASC(book book_pk) */
+		        min(rownum) as inlineViewRowNum,
+		        b.b_num, b_name, 
+		        b_date, b_author,
+		        b_pub, b_price, b_state,
+		        cateOne_num, cateTwo_num,
+		        ra_sum, ra_count,
+		        listcover_imgurl,
+		        nvl(sum(p.pd_qty), 0) as salescnt
+		    FROM
+		        book_view b LEFT OUTER JOIN pdetail p
+		    ON 
+		        b.b_num = p.b_num
+			<where>
+		        <![CDATA[
+			        b.b_num > 0
+			        AND
+			        rownum <= #{lastRownum}
+		        ]]>
+		        <include refid="bookListWhere"></include>
+			</where>
+		    GROUP BY 
+		        b.b_num, b_name, 
+		        b_date, b_author,
+		        b_pub, b_price, b_state,
+		        cateOne_num, cateTwo_num,
+		        ra_sum, ra_count,
+		        listcover_imgurl
+			<include refid="bookListOrderBy"></include>
+			    ) bookList
+			<![CDATA[WHERE inlineViewRownum >= #{startRownum}]]>
+	</select>
+	
+	<select id="bookBestList" parameterType="pagination">
+		SELECT 
+		        rn,
+		        salescnt,b_num, b_name, 
+		        to_char(b_date, 'YYYY"년" MM"월" dd"일"') as b_date, b_author,
+		        b_pub, b_price, b_state,
+		        cateOne_num, cateTwo_num,
+		        ra_sum, ra_count,
+		        listcover_imgurl
+		FROM (
+		    SELECT 
+		        /*+ INDEX_DESC(r rating_salescnt_index) INDEX_DESC(b book_pk) INDEX_DESC(i bookimg_pk) */
+		        rn, 
+		        salescnt, r.b_num, b_name, 
+		        b_date, b_author,
+		        b_pub, b_price, b_state,
+		        cateOne_num, cateTwo_num,
+		        ra_sum, ra_count,
+		        listcover_imgurl
+		    FROM
+		        bookimg i  INNER JOIN 
+		    ON b.b_num = i.b_num 
+		    INNER JOIN (select
+		                    /*+ INDEX_DESC(r rating_salescnt_index)*/ 
+		                    rownum rn, b.b_num, ra_sum, ra_count, salescnt ,
+		                    b_name, b_date, b_author,
+		                    b_pub, b_price, b_state,
+		                    cateOne_num, cateTwo_num
+		            from rating r inner join book b
+		            on b.b_num = r.b_num
+		            <![CDATA[
+		            where rownum <= 60
+		            and
+		            cateone_num = 1
+		            ) r
+		    ON b.b_num = r.b_num
+		    WHERE
+		        b.b_num > 0
+		        )
+		WHERE rn > 0;
+		]]>
+	</select>
+	
+	<!-- 도서리스트 출력, 카테고리 조건에 따라 출력내용이 다를 수 있음 (성능개선)
+	<select id="bookList" parameterType="pagination" resultType="book">
+		SELECT 
+		        rn, b_num, b_name, 
+		        to_char(b_date, 'YYYY"년" MM"월" dd"일"') as b_date, b_author,
+		        b_pub, b_price, b_state,
+		        cateOne_num, cateTwo_num,
+		        ra_sum, ra_count,
+		        listcover_imgurl,
+		        salescnt
+		FROM (
+		    SELECT 
+			<include refid="bookListIndexHint"></include>
+		      	rn, b.b_num, b_name, 
+		        b_date, b_author,
+		        b_pub, b_price, b_state,
+		        cateOne_num, cateTwo_num,
+		        ra_sum, ra_count,
+		        listcover_imgurl,
+		        salescnt
+		    FROM
+		        book b INNER JOIN bookimg i 
+		    ON b.b_num = i.b_num 
+		    INNER JOIN (
+		            select
+		                /*+ INDEX_DESC(r rating_salescnt_index)*/ 
+		                rownum rn, b.b_num, ra_sum, ra_count, salescnt ,
+		                b_name, b_date, b_author,
+		                b_pub, b_price, b_state,
+		                cateOne_num, cateTwo_num
+		            from 
+		                rating r inner join book b
+		            on 
+		                b.b_num = r.b_num
+		            where 
+		                <![CDATA[rownum <= 60]]>
+		        <include refid="bookListWhere"></include>
+		            ) r
+		    ON b.b_num = r.b_num
+		   <![CDATA[   WHERE
+		        r.b_num > 0
+		        )
+		
+		WHERE rn > #{startRownum}
+		 ]]>
+	</select> -->
+	
+		<!-- 도서리스트 출력, 카테고리 조건에 따라 출력내용이 다를 수 있음  -->
+	<select id="bookDetail" parameterType="int" resultType="book">
+			SELECT 
+				b_num, b_name, to_char(b_date, 'yyyy"년" MM"월" dd"일"') b_date, b_list, b_author,
+				b_pub, b_authorinfo, b_info, b_price, b_state, 
+				cateOne_num, cateTwo_num, 
+				ra_sum, ra_count,
+				detailcover_imgurl, detail_imgurl
+			FROM 
+				book_view
+			WHERE
+				b_num = #{b_num}
+	</select>
+	
+	<update id="bookUpdate" parameterType="book">
+		UPDATE book
+		SET
+			b_name = #{b_name},
+			b_date = #{b_date},
+			b_list = #{b_list},
+			b_author = #{b_author},
+			b_pub = #{b_pub},
+			b_authorinfo = #{b_authorinfo},
+			b_info = #{b_info},
+			b_price = #{b_price},
+			cateOne_num = #{cateOne_num},
+			cateTwo_num = #{cateTwo_num}
+		WHERE 
+			b_num = #{b_num}
+	</update>
+	
+	
+	<!-- 추출해낸 크롤링 데이터를 넣기 위한 작업 -->
+	<update id="mergeBookData" parameterType="java.util.List">
+				MERGE INTO book b 
+				USING (
+			<foreach collection="list" item="book" separator="union all"> 
+					SELECT
+						  #{book.b_num} as b_num
+						, #{book.b_name} as b_name
+						, #{book.b_date} as b_date
+						, #{book.b_list} as b_list
+						, #{book.b_author} as b_author
+						, #{book.b_pub} as b_pub
+						, #{book.b_authorinfo} as b_authorinfo
+						, #{book.b_info} as b_info
+						, #{book.b_price} as b_price
+						, #{book.cateOne_num} as cateOne_num
+						, #{book.cateTwo_num} as cateTwo_num
+					FROM
+						dual 
+			</foreach>
+					) d 
+				ON (b.b_num = d.b_num) 
+				WHEN MATCHED THEN 
+					UPDATE 
+			<set>
+						  b.b_name = d.b_name
+						, b.b_date = d.b_date
+						, b.b_list = d.b_list
+						, b.b_author = d.b_author
+						, b.b_pub = d.b_pub
+						, b.b_authorinfo = d.b_authorinfo
+						, b.b_info = d.b_info
+						, b.b_price = d.b_price
+						, b.cateOne_num = d.cateOne_num
+						, b.cateTwo_num = d.cateTwo_num 
+			</set>
+				WHEN NOT MATCHED THEN
+					INSERT
+			 <trim prefix="(" suffix=")" suffixOverrides="," >
+						  b.b_num
+						, b.b_name
+						, b.b_date
+						, b.b_list
+						, b.b_author
+						, b.b_pub
+						, b.b_authorinfo
+						, b.b_info
+						, b.b_price
+						, b.cateOne_num
+						, b.cateTwo_num
+			</trim>
+			<trim prefix="values (" suffix=")" suffixOverrides="," >
+						  d.b_num
+						, d.b_name
+						, d.b_date
+						, d.b_list
+						, d.b_author
+						, d.b_pub
+						, d.b_authorinfo
+						, d.b_info
+						, d.b_price
+						, d.cateOne_num
+						, d.cateTwo_num
+			</trim>
+		</update>
+		
+		<update id="mergeBookImgData" parameterType="java.util.List">
+				MERGE INTO bookimg i 
+				USING (
+				
+			<foreach collection="list" item="bookImg" separator="union all"> 
+					SELECT
+						  #{bookImg.b_num} as b_num
+						, #{bookImg.listcover_imgurl} as listcover_imgurl
+						, #{bookImg.detailcover_imgurl} as detailcover_imgurl
+						, #{bookImg.detail_imgurl} as detail_imgurl
+					FROM
+						dual 
+			</foreach>
+				) d 
+				ON (i.b_num = d.b_num) 
+				WHEN MATCHED THEN 
+					UPDATE
+			<set>
+						  i.listcover_imgurl = d.listcover_imgurl
+						, i.detailcover_imgurl = d.detailcover_imgurl
+						, i.detail_imgurl = d.detail_imgurl 
+			</set>
+				WHEN NOT MATCHED THEN
+					INSERT 
+			 <trim prefix="(" suffix=")" suffixOverrides="," >
+						  i.b_num
+						, i.listcover_imgurl
+						, i.detailcover_imgurl
+						, i.detail_imgurl
+			</trim>
+			<trim prefix="values (" suffix=")" suffixOverrides="," >
+						  d.b_num
+						, d.listcover_imgurl
+						, d.detailcover_imgurl
+						, d.detail_imgurl
+			</trim>
+		</update>
+</mapper>

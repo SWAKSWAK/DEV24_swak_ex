@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dev24.client.faq.dao.FaqDAO">
+
+<!-- faq 게시판 리스트 기본 조회 -->
+	<select id="faqList" parameterType="faq" resultType="faq">
+			SELECT faq_num, faq_category, faq_title, to_char(faq_writedate, 'YYYY/MM/DD') faq_writedate
+			, faq_readCnt 
+			FROM faq
+		<where>
+			<if test="search=='faq_title'">
+				<![CDATA[faq_title LIKE '%' || #{keyword} ||'%' ]]>
+			</if>
+			<if test="search=='faq_category'">
+				<![CDATA[faq_category LIKE '%' || #{keyword} ||'%' ]]>
+			</if>
+			<if test="search=='faq_content'">
+				<![CDATA[faq_content LIKE '%' || #{keyword} ||'%' ]]>
+			</if>
+		</where>  	
+	</select>
+
+
+	<!-- Q&A 게시판 글 작성 --> 
+	<insert id="faqInsert" parameterType="faq">
+		/* faq - faqInsert */
+		<selectKey keyProperty="faq_num" resultType="int" order="BEFORE">
+			select faq_num_seq.nextval from dual
+		</selectKey>
+		INSERT INTO faq(faq_num, faq_content, faq_title, faq_category, 
+		faq_writedate) 
+		VALUES (#{faq_num}, #{faq_content}, #{faq_title}, #{faq_category},
+		sysdate)
+	</insert> 
+	
+	
+	<!-- Q&A 게시판 상세페이지를 위한 조회 -->
+	<select id="faqDetail" parameterType="faq" resultType="faq">
+		/*Faq - FaqDetail */
+		SELECT 
+			faq_num, faq_title, faq_content, faq_category,
+			TO_CHAR(faq_writedate,'YYYY-MM-DD HH24:MI:SS') AS faq_writedate,
+			faq_readcnt
+		FROM faq
+		WHERE faq_num = #{faq_num}
+		
+		
+	</select>
+	
+	<!-- Q&A 게시판 readCount() 메서드 -->
+	<update id="faqCount" parameterType="int">
+	/*Faq - FaqReadCount */
+	UPDATE faq
+	SET
+		faq_readcnt = faq_readcnt+1
+	WHERE faq_num = #{faq_num}	 
+	</update>
+	
+	
+	<!-- Q&A 게시물 삭제 -->
+	<delete id="faqDelete" parameterType="faq" >
+	/* Faq - faqDelete */
+		DELETE FROM faq WHERE faq_num = #{faq_num}
+	</delete>
+	
+	<!-- Q&A 게시물 수정 -->
+	<update id="faqUpdate" parameterType="faq">
+		/* Faq - faqUpdate */
+		UPDATE faq
+				SET faq_title = #{faq_title}
+				  , faq_content = #{faq_content}
+				  , faq_writedate = sysdate
+		WHERE faq_num = #{faq_num}		  
+	</update>
+
+
+
+
+
+
+
+</mapper>

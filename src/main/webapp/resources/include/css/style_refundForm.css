@@ -1,0 +1,75 @@
+#refund_wrap{
+    width: 1200px;
+    margin: 0 auto;
+}
+
+#refund_wrap .tit_refund{
+    border-bottom: 3px solid #424874;
+}
+
+#refund_wrap .tit_refund h3{
+    width: 250px;
+    height: 50px;
+    background-color: #424874;
+    color:#fff;
+    letter-spacing: 5px;
+    font-size: 20px;
+    text-align: center;
+    line-height: 50px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    margin-top: 29px;
+    margin-bottom: -1px;
+}
+
+.t_refundForm tr:first-child{
+    border-top: 1px solid #959595;
+}
+
+.t_refundForm tr{
+    height: 30px;
+}
+
+.t_refundForm th{
+    background-color: #eee;
+}
+
+#refund_wrap table.t_refundForm td{
+    text-align: left;
+    padding-left: 10px;
+}
+
+.td_refundAcccount{
+    height: 40px;
+    letter-spacing: 7px;
+}
+
+input#checkQty{
+    width: 40px;
+    margin-bottom: 5px;
+}
+
+input#accountnumber{
+    width: 380px;
+}
+
+table.t_refundItem{
+	margin-top: 60px;	
+}
+
+#btnArea{
+    margin-top: 30px;
+}
+
+#rf_reason_area{
+    height: 200px;
+}
+
+.info{
+    background-color: #ccc;
+    width: 1000px;
+    margin: 0 auto;
+    margin-top: 40px;
+    border-radius: 10px;
+    padding: 15px;
+}

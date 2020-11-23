@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC
+  "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
+  "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+  
+<tiles-definitions>
+
+	<!-- 메인페이지 -->
+	<definition name="intro" template="/WEB-INF/views/template/client/mainLayout.jsp">
+		<put-attribute name="title" value="DEV24" />
+		<put-attribute name="header" value="/WEB-INF/views/template/client/header.jsp" />
+		<put-attribute name="footer" value="/WEB-INF/views/template/client/footer.jsp" />
+		<put-attribute name="body" value="/WEB-INF/views/template/client/body.jsp"/>
+	</definition>
+	
+	<!-- 일반페이지 -->
+	<definition name="content" template="/WEB-INF/views/template/client/contentLayout.jsp">
+		<put-attribute name="title" value="DEV24" />
+		<put-attribute name="header" value="/WEB-INF/views/template/client/header.jsp" />
+		<put-attribute name="body" value="" />
+		<put-attribute name="footer" value="/WEB-INF/views/template/client/footer.jsp" />
+	</definition>
+	
+	<definition name="cart/*" extends="content">
+		<put-attribute name="title" value="DEV24 구매" />
+		<put-attribute name="body" value="/WEB-INF/views/cart/{1}.jsp" />
+	</definition>
+	
+	<definition name="book/*" extends="content">
+		<put-attribute name="title" value="DEV24 도서" />
+		<put-attribute name="body" value="/WEB-INF/views/book/{1}.jsp" />
+	</definition>
+	
+	<definition name="purchase/*" extends="content">
+		<put-attribute name="title" value="DEV24 구매" />
+		<put-attribute name="body" value="/WEB-INF/views/purchase/{1}.jsp" />
+	</definition>
+
+	<definition name="freeboard/*" extends="content">
+		<put-attribute name="title" value="DEV24 자유게시판" />
+		<put-attribute name="body" value="/WEB-INF/views/freeboard/{1}.jsp" />
+	</definition>
+
+	<definition name="refund/*" extends="content">
+		<put-attribute name="title" value="DEV24 환불" />
+		<put-attribute name="body" value="/WEB-INF/views/refund/{1}.jsp" />
+	</definition>
+	
+	<definition name="review/*" extends="content">
+		<put-attribute name="title" value="DEV24 환불" />
+		<put-attribute name="body" value="/WEB-INF/views/review/{1}.jsp" />
+	</definition>
+	
+	<definition name="customer/*" extends="content" >
+  		<put-attribute name="title" value="로그인 및 회원가입" />
+  		<put-attribute name="body" value="/WEB-INF/views/customer/{1}.jsp"/>
+ 		</definition>
+  		
+  	<definition name="qna/*" extends="content" >
+  		<put-attribute name="title" value="qna 게시판" />
+  		<put-attribute name="body" value="/WEB-INF/views/qna/{1}.jsp"/>
+  	</definition>
+  	
+  	<definition name="faq/*" extends="content">
+		<put-attribute name="title" value="고객센터" />
+		<put-attribute name="body" value="/WEB-INF/views/faq/{1}.jsp" />
+	</definition>
+  	
+  	<definition name="ne/*" extends="content">
+		<put-attribute name="title" value="공지사항/이벤트" />
+		<put-attribute name="body" value="/WEB-INF/views/ne/{1}.jsp" />
+	</definition>
+		
+	
+	<!-- 일반페이지(사이드메뉴 있는 페이지) -->
+	<definition name="withSide" template="/WEB-INF/views/template/client/contentWithSideMenu.jsp">
+		<put-attribute name="title" value="DEV24" />
+		<put-attribute name="header" value="/WEB-INF/views/template/client/header.jsp" />
+		<put-attribute name="leftmenu" value="/WEB-INF/views/template/client/leftmenu.jsp" />
+		<put-attribute name="body" value="" />
+		<put-attribute name="footer" value="/WEB-INF/views/template/client/footer.jsp" />
+	</definition>
+	
+	<!-- 마이페이지 -->
+	<definition name="mypage/*" extends="withSide">
+		<put-attribute name="title" value="마이페이지" />
+		<put-attribute name="body" value="/WEB-INF/views/mypage/{1}.jsp" />
+	</definition>
+	
+</tiles-definitions>

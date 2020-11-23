@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dev24.client.cart.dao.CartDAO">
+
+	<!-- 장바구니 전체 조회 -->
+	<select id="cartList" parameterType="cart" resultType="cart">
+		select crt_num, b_num, b_name, b_price, c_num, crt_qty, crt_price, listcover_imgurl, cateone_num
+		from cart_view
+		where c_num = #{c_num}
+	</select>
+	
+	<!-- 장바구니 수량 변경 -->
+	<update id="cartUpdate" parameterType="int">
+		<selectKey keyProperty="b_price" resultType="int" order="BEFORE">
+			select b_price from cart_view where crt_num = #{crt_num}
+		</selectKey>
+		
+		update cart set crt_qty = #{crt_qty}, crt_price = #{b_price} * #{crt_qty}
+		where crt_num = #{crt_num}
+	</update>
+	
+	
+	<!-- 장바구니 상품 삭제 -->
+	<delete id="cartDelete" parameterType="int">
+		delete from cart where crt_num = #{crt_num}
+	</delete>
+	
+	
+	<!-- 장바구니 삽입 (해당 b_num이 존재하면 update로 처리) -->
+	<!-- open: 쿼리문이 시작하기 전 추가될 문자 -->
+	<!-- close: 쿼리문이 끝난 후 추가될 문자 -->
+<!-- 	<insert id="addToCart" parameterType="java.util.List">
+		insert into cart (
+			crt_num, crt_price, crt_qty, b_num, c_num) 
+		select crt_num_seq.nextval, c.* from (
+		<foreach collection="list" item="cvo" separator="union all"> 
+		select
+			#{cvo.crt_price} crt_price, #{cvo.crt_qty} crt_qty, #{cvo.b_num} b_num, #{cvo.c_num} c_num
+		from dual
+		</foreach>) c
+	</insert> -->
+		
+	<update id="addToCart" parameterType="java.util.List">
+		MERGE INTO
+			cart c
+		USING (
+			<foreach collection="list" item="cvo" separator="union all"> 
+				SELECT
+					  #{cvo.b_num} as b_num
+					, #{cvo.crt_price} as crt_price
+					, #{cvo.c_num} as c_num
+					, #{cvo.crt_qty} as crt_qty
+				FROM
+					dual
+			</foreach>
+		) d
+		ON (c.b_num = d.b_num)
+		WHEN MATCHED THEN
+			UPDATE
+			<set>
+				  c.crt_price = c.crt_price + d.crt_price
+				, c.c_num = d.c_num
+				, c.crt_qty = c.crt_qty + d.crt_qty
+			</set>
+		WHEN NOT MATCHED THEN
+			INSERT 
+			 <trim prefix="(" suffix=")" suffixOverrides="," >
+			 	  crt_num
+				, b_num
+				, crt_price
+				, c_num
+				, crt_qty
+			</trim>
+			<trim prefix="values (" suffix=")" suffixOverrides="," >
+				  crt_num_seq.nextval
+				, d.b_num
+				, d.crt_price
+				, d.c_num
+				, d.crt_qty
+			</trim>
+	</update>
+	
+	<!-- 구매완료 후 구매한 상품 삭제 -->
+	<delete id="purchasedItemDelete" parameterType="java.util.List">
+		delete from cart
+		where crt_num in
+			<foreach collection="list" index="index" item="cart" open="(" separator="," close=")" >
+				 #{cart.crt_num}
+			</foreach>
+	</delete>
+	
+	<select id="getCrtNum" resultType="int">
+		select crt_num_seq.nextval as crt_num from dual
+	</select>
+	
+	<insert id="buySingleItem" parameterType="cart">
+		INSERT INTO cart (
+		 	  crt_num
+			, b_num
+			, crt_price
+			, c_num
+			, crt_qty
+		) VALUES (
+			  #{crt_num}
+			, #{b_num}
+			, #{crt_price}
+			, #{c_num}
+			, #{crt_qty}
+		)
+	</insert>
+
+</mapper>

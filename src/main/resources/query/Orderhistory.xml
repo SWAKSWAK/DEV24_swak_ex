@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dev24.client.mypage.orderhistory.dao.OrderhistoryDAO">
+	
+	<!-- 주문내역 리스트 조회 -->
+	<select id="orderhistoryList" parameterType="orderhistory" resultType="orderhistory">
+		select p_num, to_char(p_buydate, 'YYYY-MM-DD') p_buydate, b_num, b_name, pd_orderstate, pd_qty, c_num, p_sender, p_receiver, pd_price, pd_num
+		from order_history_view
+		
+		<where>
+			c_num = #{c_num}
+			<if test="date_start != ''">
+				<![CDATA[AND (to_char(p_buydate, 'YYYY-MM-DD') between #{date_start} and #{date_end}) ]]>
+			
+				<if test="search=='p_sender'">
+					<![CDATA[AND (p_sender LIKE '%'||#{keyword}||'%')]]>
+					
+					<if test="orderby_state=='preShipping'">
+						AND pd_orderstate = #{pd_orderstate}
+					</if>
+					<if test="orderby_state=='shipping'">
+						AND pd_orderstate = #{pd_orderstate}
+					</if>
+					<if test="orderby_state=='pConfirm'">
+						AND pd_orderstate = #{pd_orderstate}
+					</if>
+					<if test="orderby_state=='reRequest'">
+						AND pd_orderstate = #{pd_orderstate}
+					</if>
+					<if test="orderby_state=='cancel'">
+						AND pd_orderstate = #{pd_orderstate}
+					</if>
+					<if test="orderby_state=='rfConfirm'">
+						AND pd_orderstate = #{pd_orderstate}
+					</if>
+				</if>
+				<if test="search=='p_receiver'">
+					<![CDATA[AND (p_receiver LIKE '%'||#{keyword}||'%')]]>
+					
+					<if test="orderby_state=='preShipping'">
+						AND pd_orderstate = #{pd_orderstate}
+					</if>
+					<if test="orderby_state=='shipping'">
+						AND pd_orderstate = #{pd_orderstate}
+					</if>
+					<if test="orderby_state=='pConfirm'">
+						AND pd_orderstate = #{pd_orderstate}
+					</if>
+					<if test="orderby_state=='reRequest'">
+						AND pd_orderstate = #{pd_orderstate}
+					</if>
+					<if test="orderby_state=='cancel'">
+						AND pd_orderstate = #{pd_orderstate}
+					</if>
+					<if test="orderby_state=='rfConfirm'">
+						AND pd_orderstate = #{pd_orderstate}
+					</if>
+				</if>
+				<if test="search=='p_num'">
+					<![CDATA[AND (p_num LIKE '%'||#{keyword}||'%')]]>
+					
+					<if test="orderby_state=='preShipping'">
+						AND pd_orderstate = #{pd_orderstate}
+					</if>
+					<if test="orderby_state=='shipping'">
+						AND pd_orderstate = #{pd_orderstate}
+					</if>
+					<if test="orderby_state=='pConfirm'">
+						AND pd_orderstate = #{pd_orderstate}
+					</if>
+					<if test="orderby_state=='reRequest'">
+						AND pd_orderstate = #{pd_orderstate}
+					</if>
+					<if test="orderby_state=='cancel'">
+						AND pd_orderstate = #{pd_orderstate}
+					</if>
+					<if test="orderby_state=='rfConfirm'">
+						AND pd_orderstate = #{pd_orderstate}
+					</if>
+				</if>
+				<if test="search=='b_name'">
+					<![CDATA[AND (b_name LIKE '%'||#{keyword}||'%')]]>
+					
+					<if test="orderby_state=='preShipping'">
+						AND pd_orderstate = #{pd_orderstate}
+					</if>
+					<if test="orderby_state=='shipping'">
+						AND pd_orderstate = #{pd_orderstate}
+					</if>
+					<if test="orderby_state=='pConfirm'">
+						AND pd_orderstate = #{pd_orderstate}
+					</if>
+					<if test="orderby_state=='reRequest'">
+						AND pd_orderstate = #{pd_orderstate}
+					</if>
+					<if test="orderby_state=='cancel'">
+						AND pd_orderstate = #{pd_orderstate}
+					</if>
+					<if test="orderby_state=='rfConfirm'">
+						AND pd_orderstate = #{pd_orderstate}
+					</if>
+				</if>
+			</if>
+
+		</where>
+		
+		<if test="orderby_when=='past'">
+			order by p_num
+		</if>
+		<if test="orderby_when=='last'">
+			order by p_num desc
+		</if>
+	</select>
+	
+	
+	<!-- 주문상태 수정 -->
+	<update id="orderstateUpdate" parameterType="orderhistory">
+		update pdetail		
+		set pd_orderstate = #{pd_orderstate}
+		where b_num = #{b_num} and p_num = #{p_num} and pd_num = #{pd_num}
+	</update>
+	
+
+</mapper>
