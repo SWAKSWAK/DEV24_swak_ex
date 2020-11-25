@@ -43,7 +43,7 @@ public class Pagination {
 	 * 					all, b_name, b_author, b_pub, b_info
 	 *  - searchKeyword : 입력한 검색어
 	 ************************************************************/
-	private String b_searchSelect = "";
+	private String b_searchSelect = "all";
 	private String b_searchKeyword = "";
 
 	/******************************************************************

@@ -76,8 +76,8 @@ public class AdminBookController {
 		// Pagination 객체 생성
 		int bookLength = bookService.getBookListCnt(bvo);
 		Pagination pagination = new Pagination(bookLength, startPage, page, cateOne_num, cateTwo_num, listRange, b_sort, b_stateKeyword);
-		pagination.setB_searchSelect(b_searchSelect);
 		pagination.setB_searchKeyword(b_searchKeyword);
+		pagination.setB_searchSelect(b_searchSelect);
 
 		// 얻어낸 pagination객체를 통해 bookList() 호출
 		List<BookVO> bList = bookService.bookList(pagination);

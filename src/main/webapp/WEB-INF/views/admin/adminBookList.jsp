@@ -68,6 +68,12 @@
 		</style>
     	<script>
 			$(function() {
+				
+				$("#searchSelect").val($("#b_searchSelect").val()).attr("selected", "true");
+				
+				$("#searchKeyword").val($("#b_searchKeyword").val());	
+				
+				
 				//listRangeSelect 받아온 값으로 활성화
     			var listRange = Number($("#listRange").val());
 				$("#listRangeSelect").val(listRange).attr("selected", "true");
@@ -275,26 +281,38 @@
 				});
 				
 				$("#searchBtn").click(function(){
-					
-					var b_searchSelect = $("#searchSelect").val();
-					var b_searchKeyword = $("#searchKeyword").val();
-					console.log(b_searchKeyword);
-					console.log(b_searchSelect);
-					
-					if(!chkData("#searchKeyword", "검색어를")) return;
-					
-					$("#b_searchSelect").val(b_searchSelect);
-					$("#b_searchKeyword").val(b_searchKeyword);
-					$("#b_sort").val("");
-					$("#startPage").val(1);
-					$("#page").val(1);
-					$("#b_stateKeyword").val("all");
-					
-					goURL("00");
+					search();
 				});
+				
+
+		 		//로그인시 엔터키 기능 작동
+		 		$("#searchKeyword").keydown(function(key){
+		 			if(key.keyCode == "13"){
+						search();
+		 			}
+		 		});
 				
 				
 			});//onload
+			
+			function search(){
+				
+				var b_searchSelect = $("#searchSelect").val();
+				var b_searchKeyword = $("#searchKeyword").val();
+				console.log(b_searchKeyword);
+				console.log(b_searchSelect);
+				
+				if(!chkData("#searchKeyword", "검색어를")) return;
+				
+				$("#b_searchSelect").val(b_searchSelect);
+				$("#b_searchKeyword").val(b_searchKeyword);
+				$("#b_sort").val("");
+				$("#startPage").val(1);
+				$("#page").val(1);
+				$("#b_stateKeyword").val("all");
+				
+				goURL("00");
+			};
 			
 			//b_state 컬럼 업데이트 함수
 			function updateBookState(data){
@@ -342,22 +360,25 @@
 				<input type="hidden" name="listRange" id="listRange" value="${pagination.listRange}" />
 				<input type="hidden" name="b_sort" id="b_sort" value="${pagination.b_sort}" />
 				<input type="hidden" name="b_stateKeyword" id="b_stateKeyword" value="${pagination.b_stateKeyword}" />
-				<input type="hidden" name="b_searchKeyword" id="b_searchKeyword" value=""/>
-				<input type="hidden" name="b_searchSelect" id="b_searchSelect" value=""/>
+			<input type="hidden" name="b_searchKeyword" id="b_searchKeyword" value="${ pagination.b_searchKeyword }"/>
+			<c:if test="${ not empty pagination.b_searchSelect }">
+				<input type="hidden" name="b_searchSelect" id="b_searchSelect" value="${ pagination.b_searchSelect }"/>
+			</c:if>
+			<c:if test="${ empty pagination.b_searchSelect }">
+				<input type="hidden" name="b_searchSelect" id="b_searchSelect" value="all"/>
+			</c:if>
 			</form>
 			<div class="contentHeader">
 				<div class="contentHeaderTop">
-					<form id="searchForm">
-						<select name="searchSelect" id="searchSelect" class='form-control'>
-							<option value="all" selected="selected">전체</option>
-							<option value="b_name">책제목</option>
-							<option value="b_author">저자</option>
-							<option value="b_pub">출판사</option>
-							<option value="b_info">책정보</option>
-						</select>
-						<input type="text" name="searchKeyword" id="searchKeyword" class='form-control' value=''/>
-						<button type="button" name="searchBtn" id='searchBtn' class='btn btn-default'>검색</button>
-					</form>
+					<select name="searchSelect" id="searchSelect" class='form-control'>
+						<option value="all" selected="selected">전체</option>
+						<option value="b_name">책제목</option>
+						<option value="b_author">저자</option>
+						<option value="b_pub">출판사</option>
+						<option value="b_info">책정보</option>
+					</select>
+					<input type="text" name="searchKeyword" id="searchKeyword" class='form-control' value=''/>
+					<button type="button" name="searchBtn" id='searchBtn' class='btn btn-default'>검색</button>
 				</div>
 				<div class="contentHeaderBottom">
 					<!-- pagination -->

@@ -21,7 +21,6 @@
 		<link rel="stylesheet" href="/resources/include/css/style_boot.css" />
 		<link rel="stylesheet" href="/resources/include/css/style_headerfooter.css" />
 		<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
-		
 		<script src="/resources/include/js/jquery-1.12.4.min.js"></script>
     	<script src="/resources/include/js/jquery-3.5.1.min.js"></script>
 		<script src="https://kit.fontawesome.com/a333e3670c.js" crossorigin="anonymous"></script>
@@ -58,10 +57,49 @@
             			location.href="/customer/login";
             		}
             	}
-                
              });
             
+            $("#h_searchBtn").click(function(){
+            	search();
+            });
+            
+	 		//로그인시 엔터키 기능 작동
+	 		$("#h_searchtext").on("keypress", function(){
+	 			if(e.keyCode == "13"){
+					search();
+	 			}
+	 		});
         });
+        
+		function search(){
+			
+			var b_searchSelect = $("#searchSelect").val();
+			var b_searchKeyword = $("#searchKeyword").val();
+			console.log(b_searchKeyword);
+			console.log(b_searchSelect);
+			
+			if(!chkData("#searchKeyword", "검색어를")) return;
+			
+			$("#b_searchSelect").val(b_searchSelect);
+			$("#b_searchKeyword").val(b_searchKeyword);
+			$("#b_sort").val("");
+			$("#startPage").val(1);
+			$("#page").val(1);
+			$("#b_stateKeyword").val("all");
+			
+			goURL("00");
+		};
+		
+		//패이지 이동 URI값 조합 함수
+		function goURL(category){
+			var url = "/book/"+category;
+			$("#goURL").attr({
+					"method" : "get",
+					"action" : url
+			});
+			
+			$("#goURL").submit();
+		};
     </script> 
 	</head>
 	<body>

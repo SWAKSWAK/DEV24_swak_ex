@@ -54,6 +54,9 @@ public class BookController {
 		int bookLength = bookService.getBookListCnt(bvo);
 		log.info(bookLength);
 		Pagination pagination = new Pagination(bookLength, startPage, page, cateOne_num, cateTwo_num, listRange, b_sort, "regOrOopOrSoldOut");
+		pagination.setB_searchKeyword(b_searchKeyword);
+			pagination.setB_searchSelect(b_searchSelect);
+		
 		//얻어낸 pagination객체를 통해 bookList() 호출
 		List<BookVO> bookList = bookService.bookList(pagination);
 		

@@ -55,9 +55,9 @@
 		</if>
 		<!-- 등록 과 절판 모두 출력 (사용자 페이지에서는 해당출력) -->
 		<if test="b_stateKeyword == 'regOrOopOrSoldOut'">
-			AND b_state is null
+			AND (b_state is null
 			OR b_state = 'OutOfPrint'
-			OR b_state = 'soldOut'
+			OR b_state = 'soldOut')
 		</if>
 		<!-- 미등록 -->
 		<if test="b_stateKeyword == 'unreg'">
@@ -172,8 +172,8 @@
 		SELECT
 			count(*) as bookLength
 		FROM
-			book b LEFT OUTER JOIN pdetail p
-		ON b.b_num = p.b_num
+			book b LEFT OUTER JOIN rating r
+		ON b.b_num = r.b_num
 		<where>
 	        <include refid="bookListWhere"></include>
 		</where>

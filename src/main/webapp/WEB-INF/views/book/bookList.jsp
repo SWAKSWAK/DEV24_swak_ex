@@ -325,7 +325,10 @@
 			    font-weight: bold;
 			    color: #424874;
 			}
-
+			
+			#serachInfoText {
+				margin: 10px 0;
+			}
 
 			/*정렬*/
     		.sort{
@@ -781,221 +784,224 @@
 				<input type="hidden" name="range" id="range" value="${pagination.range}" />
 				<input type="hidden" name="listRange" id="listRange" value="${pagination.listRange}" />
 				<input type="hidden" name="b_sort" id="b_sort" value="${ pagination.b_sort }" />
-				<input type="hidden" name="b_searchKeyword" id="b_searchKeyword" value=""/>
-				<input type="hidden" name="b_searchSelect" id="b_searchSelect" value=""/>
+				<input type="hidden" name="b_searchKeyword" id="b_searchKeyword" value="${ pagination.b_searchKeyword }"/>
+				<input type="hidden" name="b_searchSelect" id="b_searchSelect" value="${ pagination.b_searchSelect }"/>
 			</form>
-		<div class="contentHeader">
-			<div class="top">
-				<div class="topLeftDiv">
-					<ul class="nav sort justify-content-center">
-						<li class="nav-item sort b_sort">
-							<a class="nav-link sort active" href="#">판매순</a>
-						</li>
-						<li class="nav-item sort b_sort">
-							<a class="nav-link sort active" href="#">신상품순</a>
-						</li>
-						<li class="nav-item sort b_sort">
-							<a class="nav-link sort active" href="#">오래된순</a>	
-						</li>
-						<li class="nav-ite sortm b_sort">
-							<a class="nav-link sort active" href="#">낮은 가격순</a>
-						</li>
-						<li class="nav-item sort b_sort">
-							<a class="nav-link sort active" href="#">높은 가격순</a>
-						</li>
-					</ul>
-				</div>
-				<div class="topRightDiv">
-					<select id="listRangeSelect">
-						<option value="20">20개씩 보기</option>
-						<option value="40">40개씩 보기</option>
-					</select>
-				</div>
-			</div>
-			<div class="bottom">
-				<!-- pagination -->
-				<div class="bottomLeftDiv">
-					<div class="paginationBox">
-<%-- 						<ul class="pagination">
-							<li class="pageBtn prevRangeBtn" >
-								<i class="fas fa-angle-double-left"></i>
+			<div class="contentHeader">
+				<c:if test="${ not empty pagination.b_searchKeyword }">
+					<p id="serachInfoText">"<span style="font-weight:bold; color:#424874;">${ pagination.b_searchKeyword }</span>"(으)로 검색한 결과입니다.</p>
+				</c:if>
+				<div class="top">
+					<div class="topLeftDiv">
+						<ul class="nav sort justify-content-center">
+							<li class="nav-item sort b_sort">
+								<a class="nav-link sort active" href="#">판매순</a>
 							</li>
-							<li class="pageBtn prevBtn" >
-								<i class="fas fa-angle-left"></i>
+							<li class="nav-item sort b_sort">
+								<a class="nav-link sort active" href="#">신상품순</a>
 							</li>
-							<c:forEach var="i" begin="${pagination.startPage}" end="${pagination.endPage}">
-								<li class="pageNum" data-num="${i}"><a class="pageNumBtn" href="#">${i}</a></li>
-							</c:forEach>
-							<li class="pageBtn nextBtn">
-								<i class="fas fa-angle-right"></i>
+							<li class="nav-item sort b_sort">
+								<a class="nav-link sort active" href="#">오래된순</a>	
 							</li>
-							<li class="pageBtn nextRangeBtn">
-								<i class="fas fa-angle-double-right"></i>
+							<li class="nav-ite sortm b_sort">
+								<a class="nav-link sort active" href="#">낮은 가격순</a>
 							</li>
-						</ul> --%>
-						<ul class="pagination">
-							<li class="pageBtn prevRangeBtn page-item" >
-								<a class="page-link"  href="#">
-									<i class="fas fa-angle-double-left"></i>
-								</a>
-							</li>
-							<li class="pageBtn prevBtn page-item" >
-								<a class="page-link"  href="#">
-									<i class="fas fa-angle-left page-link"></i>
-								</a>
-							</li>
-							<c:forEach var="i" begin="${pagination.startPage}" end="${pagination.endPage}">
-								<li class="pageNum page-item" data-num="${i}"><a class="pageNumBtn page-link" href="#">${i}</a></li>
-							</c:forEach>
-							<li class="pageBtn nextBtn page-item">
-								<a class="page-link"  href="#">
-									<i class="fas fa-angle-right page-link"></i>
-								</a>
-							</li>
-							<li class="pageBtn nextRangeBtn page-item">
-								<a class="page-link"  href="#">
-									<i class="fas fa-angle-double-right page-link"></i>
-								</a>
+							<li class="nav-item sort b_sort">
+								<a class="nav-link sort active" href="#">높은 가격순</a>
 							</li>
 						</ul>
 					</div>
+					<div class="topRightDiv">
+						<select id="listRangeSelect">
+							<option value="20">20개씩 보기</option>
+							<option value="40">40개씩 보기</option>
+						</select>
+					</div>
 				</div>
-				<!-- content header buttons -->
-				<div class="bottomRightDiv">
-					<button type="button" class="btn text-right selectedCartBtn" name="cartBtn" >장바구니 담기</button>
+				<div class="bottom">
+					<!-- pagination -->
+					<div class="bottomLeftDiv">
+						<div class="paginationBox">
+	<%-- 						<ul class="pagination">
+								<li class="pageBtn prevRangeBtn" >
+									<i class="fas fa-angle-double-left"></i>
+								</li>
+								<li class="pageBtn prevBtn" >
+									<i class="fas fa-angle-left"></i>
+								</li>
+								<c:forEach var="i" begin="${pagination.startPage}" end="${pagination.endPage}">
+									<li class="pageNum" data-num="${i}"><a class="pageNumBtn" href="#">${i}</a></li>
+								</c:forEach>
+								<li class="pageBtn nextBtn">
+									<i class="fas fa-angle-right"></i>
+								</li>
+								<li class="pageBtn nextRangeBtn">
+									<i class="fas fa-angle-double-right"></i>
+								</li>
+							</ul> --%>
+							<ul class="pagination">
+								<li class="pageBtn prevRangeBtn page-item" >
+									<a class="page-link"  href="#">
+										<i class="fas fa-angle-double-left"></i>
+									</a>
+								</li>
+								<li class="pageBtn prevBtn page-item" >
+									<a class="page-link"  href="#">
+										<i class="fas fa-angle-left page-link"></i>
+									</a>
+								</li>
+								<c:forEach var="i" begin="${pagination.startPage}" end="${pagination.endPage}">
+									<li class="pageNum page-item" data-num="${i}"><a class="pageNumBtn page-link" href="#">${i}</a></li>
+								</c:forEach>
+								<li class="pageBtn nextBtn page-item">
+									<a class="page-link"  href="#">
+										<i class="fas fa-angle-right page-link"></i>
+									</a>
+								</li>
+								<li class="pageBtn nextRangeBtn page-item">
+									<a class="page-link"  href="#">
+										<i class="fas fa-angle-double-right page-link"></i>
+									</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<!-- content header buttons -->
+					<div class="bottomRightDiv">
+						<button type="button" class="btn text-right selectedCartBtn" name="cartBtn" >장바구니 담기</button>
+					</div>
+				</div>
+				<div class="contentHeaderCartMsg" style="display: none;">
+					<p class="cartMsgText">
+						<span class="cartMsgTextBold">상품이 장바구니에 담겼습니다.</span>
+						바로 확인하시겠습니까?
+					</p>
+					<div class="contentHeaderCartBtnWrap">
+						<button type="button" class="btn btn-primary goCartBtn">예</button>
+						<button type="button" class="btn btn-default noCartBtn">아니오</button>
+					</div>	
 				</div>
 			</div>
-			<div class="contentHeaderCartMsg" style="display: none;">
-				<p class="cartMsgText">
-					<span class="cartMsgTextBold">상품이 장바구니에 담겼습니다.</span>
-					바로 확인하시겠습니까?
-				</p>
-				<div class="contentHeaderCartBtnWrap">
-					<button type="button" class="btn btn-primary goCartBtn">예</button>
-					<button type="button" class="btn btn-default noCartBtn">아니오</button>
-				</div>	
-			</div>
-		</div>
-			
-		<div id="content_wrap"> 
-     
-	       <div id="leftmenu">
-	          <div class="book_cate"><a  id="10"  href="/book/10">일반도서</a></div>
-	           <ul>
-	               <li id="11"><a href="/book/11">프로그래밍 언어</a></li>
-	               <li id="12"><a href="/book/12">OS/데이터베이스</a></li>
-	               <li id="13"><a href="/book/13">웹사이트</a></li>
-	               <li id="14"><a href="/book/14">컴퓨터 입문/활용</a></li>
-	               <li id="15"><a href="/book/15">네트워크/해킹/보안</a></li>
-	             </ul>
-	            <div class="book_cate"><a id="20" href="/book/20">eBook</a></div>
-	           <ul>
-	                <li><a id="26" href="/book/26">IT전문서</a></li>
-	                <li><a id="27" href="/book/27">컴퓨터 수험서</a></li>
-	                <li><a id="28" href="/book/28">웹/컴퓨터 입문	&#38;활용</a></li>
-	          </ul>
-	       </div>
-	       
-	       <div id="div">
-		       <h1 id="listTitle"></h1>
-				<div class="listWrap">
-						<c:choose>
-							<c:when test="${ not empty bookList }">
-								<c:forEach var="bl" items="${ bookList }">
-									<div class="bookWrap" data-num="${ bl.b_num }">
-										<div class="listcoverWrap text-left">
-											<img class="listcover" src="${bl.listcover_imgurl}">
-										</div>
-										<div class="lineDiv"></div>
-										<div class="booktext text-left">
-											<h1 class="b_name" title="${ bl.b_name }">
-												<span class="b_nameText" >${ bl.b_name }</span>
-											</h1>
-											<p class="authorPub">${ bl.b_author } 저 | ${ bl.b_pub } <br/>${ bl.b_date }</p>
-											<p class="priceWrap">
-												<span class="b_price" style="display: none" >${ bl.b_price }</span>
-													<fmt:formatNumber value="${ bl.b_price }"/>
-												<span class="won">원</span>
-											</p>
-											<p class="b_rating">
-												<c:set var="avg" value="${(bl.ra_sum/bl.ra_count)}" />
-												<c:set var="devided" value="${(bl.ra_sum/bl.ra_count)/2}" />
-												<c:choose>
-													<c:when test="${ avg != Double.NaN }">
-														<c:forEach var="i" begin="1" end="5" step="1">
-															<c:if test="${ i <= devided }">
-																<i class="fas fa-star"></i>
-															</c:if>
-															<c:if test="${ i > devided }">
-																<c:choose>
-																	<c:when test="${ i>devided && (devided-i+1)>0}">
-																		<i class="fas fa-star-half-alt"></i>
-																	</c:when>
-																	<c:otherwise>
-																		<i class="far fa-star"></i>
-																	</c:otherwise>
-																</c:choose>
-															</c:if>
-														</c:forEach>
-													</c:when>
-													<c:otherwise>
-														<i class="far fa-star"></i>
-														<i class="far fa-star"></i>
-														<i class="far fa-star"></i>
-														<i class="far fa-star"></i>
-														<i class="far fa-star"></i>
-													</c:otherwise>
-												</c:choose>
-												<c:if test="${ avg == Double.NaN }">
-													<c:set var="avg" value="0"/>
+				
+			<div id="content_wrap"> 
+	     
+		       <div id="leftmenu">
+		          <div class="book_cate"><a  id="10"  href="/book/10">일반도서</a></div>
+		           <ul>
+		               <li id="11"><a href="/book/11">프로그래밍 언어</a></li>
+		               <li id="12"><a href="/book/12">OS/데이터베이스</a></li>
+		               <li id="13"><a href="/book/13">웹사이트</a></li>
+		               <li id="14"><a href="/book/14">컴퓨터 입문/활용</a></li>
+		               <li id="15"><a href="/book/15">네트워크/해킹/보안</a></li>
+		             </ul>
+		            <div class="book_cate"><a id="20" href="/book/20">eBook</a></div>
+		           <ul>
+		                <li><a id="26" href="/book/26">IT전문서</a></li>
+		                <li><a id="27" href="/book/27">컴퓨터 수험서</a></li>
+		                <li><a id="28" href="/book/28">웹/컴퓨터 입문	&#38;활용</a></li>
+		          </ul>
+		       </div>
+		       
+		       <div id="div">
+			       <h1 id="listTitle"></h1>
+					<div class="listWrap">
+							<c:choose>
+								<c:when test="${ not empty bookList }">
+									<c:forEach var="bl" items="${ bookList }">
+										<div class="bookWrap" data-num="${ bl.b_num }">
+											<div class="listcoverWrap text-left">
+												<img class="listcover" src="${bl.listcover_imgurl}">
+											</div>
+											<div class="lineDiv"></div>
+											<div class="booktext text-left">
+												<h1 class="b_name" title="${ bl.b_name }">
+													<span class="b_nameText" >${ bl.b_name }</span>
+												</h1>
+												<p class="authorPub">${ bl.b_author } 저 | ${ bl.b_pub } <br/>${ bl.b_date }</p>
+												<p class="priceWrap">
+													<span class="b_price" style="display: none" >${ bl.b_price }</span>
+														<fmt:formatNumber value="${ bl.b_price }"/>
+													<span class="won">원</span>
+												</p>
+												<p class="b_rating">
+													<c:set var="avg" value="${(bl.ra_sum/bl.ra_count)}" />
+													<c:set var="devided" value="${(bl.ra_sum/bl.ra_count)/2}" />
+													<c:choose>
+														<c:when test="${ avg != Double.NaN }">
+															<c:forEach var="i" begin="1" end="5" step="1">
+																<c:if test="${ i <= devided }">
+																	<i class="fas fa-star"></i>
+																</c:if>
+																<c:if test="${ i > devided }">
+																	<c:choose>
+																		<c:when test="${ i>devided && (devided-i+1)>0}">
+																			<i class="fas fa-star-half-alt"></i>
+																		</c:when>
+																		<c:otherwise>
+																			<i class="far fa-star"></i>
+																		</c:otherwise>
+																	</c:choose>
+																</c:if>
+															</c:forEach>
+														</c:when>
+														<c:otherwise>
+															<i class="far fa-star"></i>
+															<i class="far fa-star"></i>
+															<i class="far fa-star"></i>
+															<i class="far fa-star"></i>
+															<i class="far fa-star"></i>
+														</c:otherwise>
+													</c:choose>
+													<c:if test="${ avg == Double.NaN }">
+														<c:set var="avg" value="0"/>
+													</c:if>
+														<span class="avgVal">${avg}</span>
+												</p>
+											</div>
+											<div class="btnWrap">
+												<c:if test="${ empty bl.b_state }">
+													<div class="cntWrap">
+														<input type="number" value="1" class="crt_qty" min="0" max="99"/>
+														<button type="button" class="upBtn" ><i class="fas fa-caret-up"></i></button>
+														<button type="button" class="downBtn" ><i class="fas fa-caret-down"></i></button>
+													</div>
+													<!-- <input type="number" class="number text-right" name="cartCnt" value="0" min="0"/> -->
+													
+													<button type="button" class="btn text-right cartBtn">장바구니 담기</button>
+													<div class="cartMsg" style="display: none;">
+														<p class="cartMsgText">
+															<span class="cartMsgTextBold">상품이 장바구니에 담겼습니다.</span><br />
+															바로 확인하시겠습니까?
+														</p>
+														<div class="cartBtnWrap">
+															<button type="button" class="btn goCartBtn">예</button>
+															<button type="button" class="btn noCartBtn">아니오</button>
+														</div>											
+													</div>
+													<button type="button" class="btn text-right buyBtn">구매</button>
 												</c:if>
-													<span class="avgVal">${avg}</span>
-											</p>
-										</div>
-										<div class="btnWrap">
-											<c:if test="${ empty bl.b_state }">
-												<div class="cntWrap">
-													<input type="number" value="1" class="crt_qty" min="0" max="99"/>
-													<button type="button" class="upBtn" ><i class="fas fa-caret-up"></i></button>
-													<button type="button" class="downBtn" ><i class="fas fa-caret-down"></i></button>
+												<div class="stateWrap">
+													<c:if test="${ bl.b_state == 'outOfPrint' }">
+														<img src="/resources/image/footer_logo.png" class="stateImage"/>
+														<h1 class="stateText">절판된 도서입니다.</h1>
+													</c:if>
+													<c:if test="${ bl.b_state == 'soldOut' }">
+														<img src="/resources/image/footer_logo.png" class="stateImage"/>
+														<h1 class="stateText">품절된 도서입니다.</h1>
+													</c:if>
 												</div>
-												<!-- <input type="number" class="number text-right" name="cartCnt" value="0" min="0"/> -->
-												
-												<button type="button" class="btn text-right cartBtn">장바구니 담기</button>
-												<div class="cartMsg" style="display: none;">
-													<p class="cartMsgText">
-														<span class="cartMsgTextBold">상품이 장바구니에 담겼습니다.</span><br />
-														바로 확인하시겠습니까?
-													</p>
-													<div class="cartBtnWrap">
-														<button type="button" class="btn goCartBtn">예</button>
-														<button type="button" class="btn noCartBtn">아니오</button>
-													</div>											
-												</div>
-												<button type="button" class="btn text-right buyBtn">구매</button>
-											</c:if>
-											<div class="stateWrap">
-												<c:if test="${ bl.b_state == 'outOfPrint' }">
-													<img src="/resources/image/footer_logo.png" class="stateImage"/>
-													<h1 class="stateText">절판된 도서입니다.</h1>
-												</c:if>
-												<c:if test="${ bl.b_state == 'soldOut' }">
-													<img src="/resources/image/footer_logo.png" class="stateImage"/>
-													<h1 class="stateText">품절된 도서입니다.</h1>
-												</c:if>
+											</div>
+											<div class="chkWrap">
+												<input type="checkbox" class="checkbox" value="${ bl.b_num }" />
 											</div>
 										</div>
-										<div class="chkWrap">
-											<input type="checkbox" class="checkbox" value="${ bl.b_num }" />
-										</div>
-									</div>
-								</c:forEach>
-							</c:when>
-						</c:choose>
-					</div>
-			</div> <!-- 여기에 도서 리스트 넣으세요. 이름바꿔도됨 -->
-	        
-	    </div> <!-- content_wrap -->
+									</c:forEach>
+								</c:when>
+							</c:choose>
+						</div>
+				</div> <!-- 여기에 도서 리스트 넣으세요. 이름바꿔도됨 -->
+		        
+		    </div> <!-- content_wrap -->
 
 		<div></div>
 		<div class="contentFooter">

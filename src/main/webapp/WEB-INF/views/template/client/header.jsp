@@ -1,13 +1,81 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page trimDirectiveWhitespaces="true" %>
+		
+<script src="/resources/include/js/common.js"></script>
 <style>
 	#afterLogin{
 		clear:both;
 		margin-top:10px;
 	}
 </style>
+<script>
+	$(function(){
+		
+		$("#h_searchmenu").val($("#b_searchSelect").val()).attr("selected", "true");
+		
+		$("#h_searchtext").val($("#b_searchKeyword").val());	
+		
+		
+		$("#h_searchBtn").click(function(){
+			search();
+		});
+		
+		//로그인시 엔터키 기능 작동
+		$("#h_searchtext").keydown(function(key){
+			if(key.keyCode == "13"){
+				search();
+			}
+		});
+	});
+		
+	function search(){
+	
+		var b_searchSelect = $("#h_searchmenu").val();
+		var b_searchKeyword = $("#h_searchtext").val();
+		console.log(b_searchKeyword);
+		console.log(b_searchSelect);
+		
+		if(!chkData("#h_searchtext", "검색어를")) return;
+		
+		$("#b_searchSelect").val(b_searchSelect);
+		$("#b_searchKeyword").val(b_searchKeyword);
+		$("#b_sort").val("");
+		$("#startPage").val(1);
+		$("#page").val(1);
+		$("#b_stateKeyword").val("all");
+		
+		goURL("00");
+	};
+	
+	//패이지 이동 URI값 조합 함수
+	function goURL(category){
+		var url = "/book/"+category;
+		$("#goURL").attr({
+				"method" : "get",
+				"action" : url
+		});
+		
+		$("#goURL").submit();
+	};
+</script>
 	<header>
+		<form id="goURL" name="goURL">
+			<input type="hidden" name="page" id="page" value="${pagination.page}"/>
+			<input type="hidden" name="startPage" id="startPage" value="${pagination.startPage}" />
+			<input type="hidden" name="endPage" id="endPage" value="${pagination.endPage}" />
+			<input type="hidden" name="pageLength" id="pageLength" value="${pagination.pageLength}" />
+			<input type="hidden" name="range" id="range" value="${pagination.range}" />
+			<input type="hidden" name="listRange" id="listRange" value="${pagination.listRange}" />
+			<input type="hidden" name="b_sort" id="b_sort" value="${ pagination.b_sort }" />
+			<input type="hidden" name="b_searchKeyword" id="b_searchKeyword" value="${ pagination.b_searchKeyword }"/>
+			<c:if test="${ not empty pagination.b_searchSelect }">
+				<input type="hidden" name="b_searchSelect" id="b_searchSelect" value="${ pagination.b_searchSelect }"/>
+			</c:if>
+			<c:if test="${ empty pagination.b_searchSelect }">
+				<input type="hidden" name="b_searchSelect" id="b_searchSelect" value="all"/>
+			</c:if>
+		</form>
         <div id="header_wrap">
             <div id="logo"><a href="/"><img src="/resources/image/logo.png" alt="로고"></a></div>
 			 
@@ -62,19 +130,17 @@
 		    </nav> <!-- nav -->
        
            <div id="h_search">
-               <div id="h_search_select">
-                   <select name="h_searchmenu" id="h_searchmenu">
-                       <option value="">전체검색</option>
-                       <option value="">검색조건1</option>
-                       <option value="">검색조건2</option>
-                       <option value="">검색조건3</option>
-                   </select>
-               </div>
-               
-               <div id="h_search_input"><input type="text" name="" id="h_searchtext" placeholder="검색어를 입력하세요." /></div>
-               
-               <button type="button" id="h_searchBtn"><i class="fas fa-search"></i></button>
-               
+	               <div id="h_search_select">
+	                   <select name="h_searchmenu" id="h_searchmenu">
+							<option value="all" selected="selected">전체검색</option>
+							<option value="b_name">책제목</option>
+							<option value="b_author">저자</option>
+							<option value="b_pub">출판사</option>
+							<option value="b_info">책정보</option>
+	                   </select>
+	               </div>
+	              	 <div id="h_search_input"><input type="text" name="" id="h_searchtext" placeholder="검색어를 입력하세요." /></div>
+	               <button type="button" id="h_searchBtn"><i class="fas fa-search"></i></button>
            </div><!-- search -->
         </div><!-- header_wrap -->
     </header>
