@@ -45,22 +45,22 @@
 		$("#page").val(1);
 		$("#b_stateKeyword").val("all");
 		
-		goURL("00");
+		goPage("00");
 	};
 	
 	//패이지 이동 URI값 조합 함수
-	function goURL(category){
+	function goPage(category){
 		var url = "/book/"+category;
-		$("#goURL").attr({
+		$("#goPage").attr({
 				"method" : "get",
 				"action" : url
 		});
 		
-		$("#goURL").submit();
+		$("#goPage").submit();
 	};
 </script>
 	<header>
-		<form id="goURL" name="goURL">
+		<form id="goPage" name="goPage">
 			<input type="hidden" name="page" id="page" value="${pagination.page}"/>
 			<input type="hidden" name="startPage" id="startPage" value="${pagination.startPage}" />
 			<input type="hidden" name="endPage" id="endPage" value="${pagination.endPage}" />

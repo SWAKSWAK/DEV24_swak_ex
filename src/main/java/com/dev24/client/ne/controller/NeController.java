@@ -3,20 +3,14 @@ package com.dev24.client.ne.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.dev24.client.ne.service.NeService;
 import com.dev24.client.ne.vo.NeVO;
+import com.dev24.common.vo.PageDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Setter;
@@ -32,12 +26,14 @@ public class NeController {
 	private NeService neService;
 	
 	@RequestMapping("/neList")
-	public String neList (Model model) {
+	public String neList (@ModelAttribute("data") NeVO nevo, Model model) {
 		log.info("neList 호출 완료");
 		
-		List<NeVO> neList = neService.neList();
-		
+		List<NeVO> neList = neService.neList(nevo);
 		model.addAttribute("neList", neList);
+		
+		int total = neService.getNeListCnt(nevo);
+		model.addAttribute("pageMaker", new PageDTO(nevo, total));
 		
 		return "ne/neList";
 	}

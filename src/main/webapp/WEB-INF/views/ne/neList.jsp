@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page trimDirectiveWhitespaces="true" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="tag" tagdir="/WEB-INF/tags" %>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -33,12 +34,16 @@
 				goPage();
     		});
     		
+    		//페이징
+    		$(".paginate_button a").click(function(e){
+    			e.preventDefault();
+    			$("#f_search").find("input[name='pageNum']").val($(this).attr("href"));
+    			goPage();
+    		});
+    		
     	});
     	
     	function goPage(){
-			if($("#search").val()=='all'){
-				$("#keyword").val("");
-			}
 			$("#f_search").attr({
 				"method":"get", 
 				"action":"/ne/neList"
@@ -49,12 +54,24 @@
     </script>
     
     <style>
-    	.cnt{margin:5px;}
-    	.goDetail {
-    		cursor: pointer;
-    		text-align: left;
-    	}
-    </style>
+		.cnt {
+			margin: 5px;
+		}
+		
+		.goDetail {
+			cursor: pointer;
+			text-align: left;
+		}
+		.paginationWrap {
+			text-align: center;
+		}
+		.paginationWrap * {
+			display: inline-block;
+		}
+		#serachInfoText {
+			text-align: center;
+		}
+	</style>
     
 	</head>
 	<body>
@@ -70,21 +87,23 @@
         </div>
         <div id="content">
             <div id="board_search">
+				
                 <form name="f_search" id="f_search">
                     <div class="form-group">
                         <label>검색조건</label>
                         <select name="search" id="search">
                             <option value="all">전체</option>
-                            <option value="fb_title">글제목</option>
-                            <option value="fb_author">작성자</option>
-                            <option value="fb_content">글내용</option>
+                            <option value="ne_title">글제목</option>
+                            <option value="ne_content">글내용</option>
                         </select>
                         <input type="text" name="keyword" id="keyword" placeholder="검색어를 입력하세요" class="form-control" />
                         <input type="button" id="boardSearchBtn" value="검색" class="btn btn-default" />
                     </div>
                 </form>
             </div><!-- board_search -->
-		
+			<c:if test="${ not empty pageMaker.cvo.keyword }">
+					<p id="serachInfoText">"<span style="font-weight:bold; color:#424874;">${ pageMaker.cvo.keyword }</span>"(으)로 검색한 결과입니다.</p>
+			</c:if>
             <div id="table_wrap">
                 <table summary="게시판 리스트" class="table">
                 	<colgroup>
@@ -126,6 +145,9 @@
                     </tbody>
                 </table>
             </div><!-- table_wrap -->
+            <div class='paginationWrap'>
+            	<tag:pagination endPage="${ pageMaker.endPage }" startPage="${ pageMaker.startPage }" amount="${ pageMaker.cvo.amount }" next="${ pageMaker.next }" prev="${ pageMaker.prev }" pageNum="${ pageMaker.cvo.pageNum }"></tag:pagination>
+            </div>
         </div> <!-- content (width : 1200px) -->
     </div> <!-- content_wrap -->
     

@@ -2,11 +2,36 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.dev24.client.ne.dao.NeDAO">
 
+	<!-- 검색 조건 -->
+	<sql id="neWhere">
+		<if test="search == 'all' or search == ''">
+				upper(ne_title) LIKE '%'||upper(#{keyword})||'%'
+			OR
+				upper(ne_content) LIKE '%'||upper(#{keyword})||'%'
+		</if>
+		<if test="search == 'ne_title'">
+			upper(ne_title) LIKE '%'||upper(#{keyword})||'%'
+		</if>
+		<if test="search == 'ne_content'">
+			upper(ne_content) LIKE '%'||upper(#{keyword})||'%'
+		</if>
+	</sql>
+	
+	<!-- 공지사항&이벤트 게시물 개수 가져오기 -->
+	<select id="getNeListCnt" parameterType="ne" resultType="int">
+		SELECT
+			count(*) as total
+		FROM
+			neboard
+		WHERE
+			<include refid="neWhere"></include>
+	</select>
+
 	<!-- 공지사항&이벤트 리스트 출력 -->
-	<select id="neList" resultType="ne">
+	<select id="neList" parameterType="ne" resultType="ne">
 		SELECT
 			ne_num, ne_readcnt, ne_title, 
-			ne_date, ne_cate,
+			ne_date, ne_cate, ne_content,
 			(select count(*) from necmt c where c.ne_num = n.ne_num) as ne_rcnt
 		FROM
 			(
@@ -14,10 +39,12 @@
 				/*+ INDEX_DESC(ne neboard_pk)*/
 				rownum rn,
 				ne_num, ne_readcnt, ne_title, 
-				ne_date, ne_cate
+				ne_date, ne_cate, ne_content
 			FROM
 				neboard ne
 			) n
+		WHERE
+			<include refid="neWhere"></include>
 	</select>
 	
 	<update id="neReadCnt">

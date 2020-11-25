@@ -18,26 +18,25 @@ public class PageDTO {
 		this.cvo=cvo;
 		this.total=total;
 		
-		/*페이징의 끝번호(endPage) 구하기
-		 * this.endPAge = (int) (Math.ceil(페이지번호/10.0)) * 10;
+		/*�럹�씠吏뺤쓽 �걹踰덊샇(endPage) 援ы븯湲�
+		 * this.endPAge = (int) (Math.ceil(�럹�씠吏�踰덊샇/10.0)) * 10;
 		*/
 		this.endPage= (int)(Math.ceil(cvo.getPageNum()/10.0))*10;
 		
-		// 페이징의 시작번호(startPage) 구하기 
+		// �럹�씠吏뺤쓽 �떆�옉踰덊샇(startPage) 援ы븯湲� 
 		this.startPage = this.endPage-9;
 		
-		//끝페이지 구하기
-		
+		//�걹�럹�씠吏� 援ы븯湲�
 		int realEnd = (int)(Math.ceil((total*1.0)/cvo.getAmount()));
 		
 		if(realEnd <= this.endPage) {
 			this.endPage = realEnd;
 		}
 		
-		// 이전(prev) 구하기 
+		// �씠�쟾(prev) 援ы븯湲� 
 		this.prev = this.startPage > 1;
 		
-		// 다음 (next) 구하기
+		// �떎�쓬 (next) 援ы븯湲�
 		this.next = this.endPage < realEnd;
 	}
 	

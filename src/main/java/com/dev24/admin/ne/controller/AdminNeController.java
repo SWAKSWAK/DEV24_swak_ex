@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.dev24.client.ne.service.NeService;
 import com.dev24.client.ne.vo.NeVO;
+import com.dev24.common.vo.PageDTO;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
@@ -27,11 +28,14 @@ public class AdminNeController {
 	private NeService neService;
 
 	@RequestMapping(value="/neList", method=RequestMethod.GET)
-	public String adminNeList(Model model){
-		log.info("adminNeList È£ï¿½ï¿½ ï¿½Ï·ï¿½");
-		List<NeVO> neList = neService.neList();
+	public String adminNeList(@ModelAttribute("data") NeVO nevo, Model model){
+		log.info("adminNeList È£Ãâ ¼º°ø");
 		
+		List<NeVO> neList = neService.neList(nevo);
 		model.addAttribute("neList", neList);
+		
+		int total = neService.getNeListCnt(nevo);
+		model.addAttribute("pageMaker", new PageDTO(nevo, total));
 		
 		return "admin/adminNeList";
 	}

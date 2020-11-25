@@ -7,7 +7,8 @@ import com.dev24.client.ne.vo.NeVO;
 public interface NeDAO {
 	
 	//select
-	public List<NeVO> neList();
+	public int getNeListCnt(NeVO nevo);
+	public List<NeVO> neList(NeVO nevo);
 	public NeVO neDetail(int ne_num);
 	
 	//delete

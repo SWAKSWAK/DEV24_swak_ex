@@ -26,8 +26,14 @@ public class NeServiceImpl implements NeService{
 	private NecmtDAO necmtDAO;
 	
 	@Override
-	public List<NeVO> neList() {
-		List<NeVO> neList = neDAO.neList();
+	public int getNeListCnt(NeVO nevo) {
+		int total = neDAO.getNeListCnt(nevo);
+		return total;
+	}
+	
+	@Override
+	public List<NeVO> neList(NeVO nevo) {
+		List<NeVO> neList = neDAO.neList(nevo);
 		return neList;
 	}
 	
