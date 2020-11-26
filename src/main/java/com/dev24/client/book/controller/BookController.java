@@ -50,9 +50,15 @@ public class BookController {
 		bvo.setCateTwo_num(cateTwo_num);
 		bvo.setB_stateKeyword("regOrOopOrSoldOut");
 		
-		// Pagination 객체 생성
+		//출력할 도서 개수 가져오기
+		bvo.setB_searchKeyword(b_searchKeyword);
+		bvo.setB_searchSelect(b_searchSelect);
+		bvo.setB_stateKeyword("regOrOopOrSoldOut");
 		int bookLength = bookService.getBookListCnt(bvo);
-		log.info(bookLength);
+		
+		log.info("page: " + page);
+		
+		//pagination 객체 생성
 		Pagination pagination = new Pagination(bookLength, startPage, page, cateOne_num, cateTwo_num, listRange, b_sort, "regOrOopOrSoldOut");
 		pagination.setB_searchKeyword(b_searchKeyword);
 			pagination.setB_searchSelect(b_searchSelect);

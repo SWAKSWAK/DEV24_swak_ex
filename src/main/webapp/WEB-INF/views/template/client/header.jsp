@@ -12,7 +12,9 @@
 <script>
 	$(function(){
 		
-		$("#h_searchmenu").val($("#b_searchSelect").val()).attr("selected", "true");
+		if($("#b_searchSelect").val() != ""){
+			$("#h_searchmenu").val($("#b_searchSelect").val()).attr("selected", "true");
+		}
 		
 		$("#h_searchtext").val($("#b_searchKeyword").val());	
 		
@@ -73,7 +75,7 @@
 				<input type="hidden" name="b_searchSelect" id="b_searchSelect" value="${ pagination.b_searchSelect }"/>
 			</c:if>
 			<c:if test="${ empty pagination.b_searchSelect }">
-				<input type="hidden" name="b_searchSelect" id="b_searchSelect" value="all"/>
+				<input type="hidden" name="b_searchSelect" id="b_searchSelect" value=""/>
 			</c:if>
 		</form>
         <div id="header_wrap">

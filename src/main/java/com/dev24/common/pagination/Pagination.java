@@ -43,7 +43,7 @@ public class Pagination {
 	 * 					all, b_name, b_author, b_pub, b_info
 	 *  - searchKeyword : 입력한 검색어
 	 ************************************************************/
-	private String b_searchSelect = "all";
+	private String b_searchSelect = "";
 	private String b_searchKeyword = "";
 
 	/******************************************************************
@@ -85,13 +85,9 @@ public class Pagination {
 		if (startPage != 0) {
 			this.startPage = startPage;
 		}
-//		this.endPage = (int)(Math.ceil((double)this.page/range) * range);
-		log.info("Math.ceil((double)this.page/range) * range: " + "Math.ceil((double)*" + this.page + "/" + range + "*" + range + "=" + this.endPage);
 		
 		if(endPage > pageLength)
 			this.endPage = pageLength;
-		log.info("endPage: " + this.endPage + ", pageLength: " + pageLength);
-		log.info("if(endPage > pageLength) : " + (endPage > pageLength));
 		
 		// 이전버튼을 활성화 시킬지 여부
 		// startRownum 이 1보다 낮으면 더이상 이전도서가 없다는 뜻

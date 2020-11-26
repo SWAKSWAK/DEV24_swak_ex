@@ -77,22 +77,22 @@
 		<if test="b_searchSelect == ''">
 		</if>
 		<if test="b_searchSelect == 'all'">
-			AND b_name LIKE '%'||#{b_searchKeyword}||'%'
-			OR b_author LIKE '%'||#{b_searchKeyword}||'%'
-			OR b_pub LIKE '%'||#{b_searchKeyword}||'%'
-			OR b_info LIKE '%'||#{b_searchKeyword}||'%'
+			AND ( upper(b_name) LIKE '%'||upper(#{b_searchKeyword})||'%'
+			OR upper(b_author) LIKE '%'||upper(#{b_searchKeyword})||'%'
+			OR upper(b_pub) LIKE '%'||upper(#{b_searchKeyword})||'%'
+			OR upper(b_info) LIKE '%'||upper(#{b_searchKeyword})||'%')
 		</if>
 		<if test="b_searchSelect == 'b_name'">
-			AND b_name LIKE '%'||#{b_searchKeyword}||'%'
+			AND upper(b_name) LIKE '%'||upper(#{b_searchKeyword})||'%'
 		</if>
 		<if test="b_searchSelect == 'b_author'">
-			AND b_author LIKE '%'||#{b_searchKeyword}||'%'
+			AND upper(b_author) LIKE '%'||upper(#{b_searchKeyword})||'%'
 		</if>
 		<if test="b_searchSelect == 'b_pub'">
-			AND b_pub LIKE '%'||#{b_searchKeyword}||'%'
+			AND upper(b_pub) LIKE '%'||upper(#{b_searchKeyword})||'%'
 		</if>
 		<if test="b_searchSelect == 'b_info'">
-			AND b_info LIKE '%'||#{b_searchKeyword }||'%'
+			AND upper(b_info) LIKE '%'||upper(#{b_searchKeyword })||'%'
 		</if>
 	</sql>
 	
@@ -168,66 +168,19 @@
 	</insert>
 	
 	<!-- 도서 총 개수 출력, 카테고리 조건에 따라 총개수가 아닐 수 있음 -->
-	<select id="getBookListCnt" parameterType="book" resultType="int">
+	<select id="getBookListCnt" parameterType="pagination" resultType="int">
 		SELECT
 			count(*) as bookLength
 		FROM
-			book b LEFT OUTER JOIN rating r
-		ON b.b_num = r.b_num
+			book
 		<where>
-	        <include refid="bookListWhere"></include>
+			<include refid="bookListWhere"></include>
 		</where>
 	</select>
 	
 	<!-- 도서리스트 출력, 카테고리 조건에 따라 출력내용이 다를 수 있음  (사용안함)  -->
 	<select id="bookList" parameterType="pagination" resultType="book">
-		<if test="b_sort == 'new' or b_sort == 'old' or b_sort == 'highPrice' or b_sort == 'lowPrice'">
-				SELECT 
-				        rn,
-				        salescnt,b_num, b_name, 
-				        to_char(b_date, 'YYYY"년" MM"월" dd"일"') as b_date, b_author,
-				        b_pub, b_price, b_state,
-				        cateOne_num, cateTwo_num,
-				        ra_sum, ra_count,
-				        listcover_imgurl
-				FROM (
-				    SELECT		
-						<if test="b_sort =='new'">	
-				        	/*+ INDEX_DESC(r rating_pk) INDEX_DESC(b book_pk) INDEX_DESC(i bookimg_pk) */
-						</if>			
-						<if test="b_sort =='old'">	
-				        	/*+ INDEX_ASC(r rating_pk) INDEX_ASC(b book_pk) INDEX_ASC(i bookimg_pk) */
-						</if>		
-						<if test="b_sort =='lowPrice'">
-        					/*+ INDEX_ASC(r rating_pk) INDEX_ASC(b book_b_price_index) INDEX_ASC(i bookimg_pk) */
-						</if>
-						<if test="b_sort =='highPrice'">
-        					/*+ INDEX_DESC(r rating_pk) INDEX_DESC(b book_b_price_index) INDEX_DESC(i bookimg_pk) */
-						</if>
-				        rownum rn,
-				        salescnt, b.b_num, b_name, 
-				        b_date, b_author,
-				        b_pub, b_price, b_state,
-				        cateOne_num, cateTwo_num,
-				        ra_sum, ra_count,
-				        listcover_imgurl
-				    FROM
-				        book b INNER JOIN bookimg i
-				    ON 
-				        b.b_num = i.b_num
-				    INNER JOIN
-				        rating r
-				    ON
-				        b.b_num = r.b_num
-				    <![CDATA[ WHERE rownum <= #{lastRownum}
-				]]>
-					<include refid="bookListWhere"></include>
-				)
-				<![CDATA[
-		        WHERE
-		        	rn >= #{startRownum}
-		    ]]>
-		</if>
+		
 		<if test="b_sort == 'best'">
 		    SELECT 
 		        brn,
@@ -241,7 +194,7 @@
 		        bookimg i 
 		    INNER JOIN (select 
 		                    rownum brn, b.b_num, ra_sum, ra_count, salescnt ,
-		                    b_name, b_date, b_author,
+		                    b_name, b_date, b_author, b_info,
 		                    b_pub, b_price, b_state,
 		                    cateOne_num, cateTwo_num
 		            from book b inner join (
@@ -268,6 +221,79 @@
 		        brn >= #{startRownum}
 		        order by salescnt desc
 		    ]]>
+		</if>
+		<if test="b_sort == 'new' or b_sort == 'old' or b_sort == 'highPrice' or b_sort == 'lowPrice' ">
+			SELECT 
+			    brn, salescnt, r.b_num, b_name, to_char(b_date, 'YYYY"년" MM"월" dd"일"') as b_date, b_author, b_pub, 
+			    b_price, b_state, cateOne_num, cateTwo_num, ra_sum, ra_count, listcover_imgurl 
+			FROM 
+			    bookimg i 
+			    INNER JOIN (
+			        select 
+			            rownum brn, b.b_num, ra_sum, ra_count, salescnt , b_name, b_date, b_author, 
+			            b_pub, b_price, b_state, cateOne_num, cateTwo_num 
+			        from 
+			            rating r 
+			            inner join 
+			            ( 
+			                select 
+			                	<if test="b_sort=='new'">
+			                    	/*+ INDEX_DESC(b book_b_date_index) */
+			                	</if>
+			                	<if test="b_sort=='old'">
+			                    	/*+ INDEX_ASC(b book_b_date_index) */
+			                	</if>
+			                	<if test="b_sort=='highPrice'">
+			                    	/*+ INDEX_DESC(b book_b_price_index) */
+			                	</if>
+			                	<if test="b_sort=='lowPrice'">
+			                    	/*+ INDEX_ASC(b book_b_price_index) */
+			                	</if>
+			                    rownum brn, b.b_num, b_name, b_date, b_author, b_info,
+			                    b_pub, b_price, b_state, cateOne_num, cateTwo_num 
+			                from 
+			                book b 
+			            ) b 
+			        on 
+			            b.b_num = r.b_num 
+			        WHERE 
+			           
+		           <![CDATA[  rownum <= #{lastRownum} ]]>
+			            <include refid="bookListWhere"></include>
+			    ORDER BY
+				<if test="b_sort == 'new'">
+			    	b_date DESC
+				</if>
+				<if test="b_sort == 'old'">
+			    	b_date ASC
+				</if>
+				<if test="b_sort == 'highPrice'">
+			    	b_price DESC
+				</if>
+				<if test="b_sort == 'lowPrice'">
+			    	b_price ASC
+				</if>
+			        ) r 
+			ON 
+			    i.b_num = r.b_num 
+			WHERE 
+			 <![CDATA[     i.b_num > 0 
+			AND 
+			   
+		           brn >= #{startRownum} ]]>
+			order by 
+				<if test="b_sort == 'new'">
+			    	b_date DESC
+				</if>
+				<if test="b_sort == 'old'">
+			    	b_date ASC
+				</if>
+				<if test="b_sort == 'highPrice'">
+			    	b_price DESC
+				</if>
+				<if test="b_sort == 'lowPrice'">
+			    	b_price ASC
+				</if>
 		</if>
 	</select>
 	

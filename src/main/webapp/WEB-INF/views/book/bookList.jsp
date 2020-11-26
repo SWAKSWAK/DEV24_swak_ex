@@ -251,12 +251,6 @@
 				color: #dcd6f7;
 				width: 65px;
 			}
-			.goCartBtn {
-				color: white;
-			}
-			.noCartBtn{
-				color: black;
-			}
 			
 			.chkWrap {
 				display: inline-block;
@@ -400,7 +394,7 @@
 					$("#b_sort").val(sortArr[index]);
 					$("#page").val(1);
 					$("#startPage").val(1);
-					goURL(category);
+					goPage(category);
 				});
 
     			//수량 실시간 갑지 (1~99)
@@ -411,11 +405,7 @@
     			$(".cartBtn").click(function(){
     				var index = $(".cartBtn").index(this);
     				if(!crt_qtyRange(".crt_qty:eq("+index+")")) return;
-    				/* if ($(".crt_qty:eq("+index+")").val("", 0) == 0){
-    					alert("수량을 입력해 주세요.");
-    					$(".crt_qty:eq("+index+")").val(0);
-    					return;
-    				} */
+    				
     				if ($(".crt_qty:eq("+index+")").val() == 0){
     					alert("수량을 입력해 주세요.");
     					$(".crt_qty:eq("+index+")").val(0);
@@ -432,7 +422,6 @@
     				cvo.b_num = dataNum;
     				cvo.crt_qty = crt_qty;
     				cvo.crt_price = b_price * crt_qty;
-    				console.log(cvo.b_price);
     				
     				cvoList.push(cvo);
     				
@@ -530,11 +519,11 @@
 						startPage = startPage-10;
 							$("#startPage").val(startPage);
 							$("#page").val(startPage);
-							goURL(category);
+							goPage(category);
 						} else {
 							$("#startPage").val(1);
 							$("#page").val(1);
-							goURL(category);
+							goPage(category);
 						}
 					}
 				});
@@ -544,7 +533,7 @@
 						$("#startPage").val(startPage+10);
 						startPage = $("#startPage").val();
 						$("#page").val(startPage);
-						goURL(category);
+						goPage(category);
 					}
 				});
 	
@@ -552,7 +541,7 @@
 					if (startPage-1 > 1){
 						$("#page").val(1);
 						$("#startPage").val(1);
-						goURL(category);
+						goPage(category);
 					}
 				});
 	
@@ -565,7 +554,7 @@
 						if (pageLength%range == 0){
 							$("#startPage").val(parseInt(pageLength - 9));
 						}
-						goURL(category);
+						goPage(category);
 					}
 						
 				});
@@ -573,7 +562,8 @@
 				$(".pageNumBtn").click(function(){
 					var page = $(this).html();
 					$("#page").val(page);
-					goURL(category);
+					console.log($("#page").val());
+					goPage(category);
 				});
 				
 				$(".pageNum[data-num='"+page+"'] > a.pageNumBtn")
@@ -584,12 +574,17 @@
 					var b_num = $(this).parents(".bookWrap").attr("data-num");
 					location.href = "/book/detail/"+b_num;
 				});
+				
+				$(".listcover").click(function(){
+					var b_num = $(this).parents(".bookWrap").attr("data-num");
+					location.href = "/book/detail/"+b_num;
+				});
 	
 				// #listRange 값이 바뀔 때마다 맞춰 출력
 				$("#listRangeSelect").change(function(){
 					var listRangeSelect = $("#listRangeSelect").val();
 					$("#listRange").val(listRangeSelect);
-					goURL(category);
+					goPage(category);
 				});
 				//페이징 처리 종료
     			
@@ -608,7 +603,7 @@
 					$("#b_startPage").val(1);
 					$("#b_stateKeyword").val("all");
 					
-					goURL("00");
+					goPage("00");
 				});
     			
     			/*구매버튼 클릭시 이벤트*/
@@ -762,31 +757,31 @@
 	            });
 	         };
 	         
-			//패이지 이동 URI값 조합 함수
-			function goURL(category){
+			/* //패이지 이동 URI값 조합 함수
+			function goPage(category){
 				var url = "/book/"+category;
-				$("#goURL").attr({
+				$("#goPage").attr({
 						"method" : "get",
 						"action" : url
 				});
 				
-				$("#goURL").submit();
-			};
+				$("#goPage").submit();
+			}; */
     	</script>
 	</head>
 	<body>
 		<div class="contentWrap">
-			<form id="goURL" name="goURL">
+			<%-- <form id="goPage" name="goPage">
 				<input type="hidden" name="page" id="page" value="${pagination.page}"/>
 				<input type="hidden" name="startPage" id="startPage" value="${pagination.startPage}" />
-				<%-- <input type="hidden" name="endPage" id="endPage" value="${pagination.endPage}" /> --%>
+				<input type="hidden" name="endPage" id="endPage" value="${pagination.endPage}" />
 				<input type="hidden" name="pageLength" id="pageLength" value="${pagination.pageLength}" />
 				<input type="hidden" name="range" id="range" value="${pagination.range}" />
 				<input type="hidden" name="listRange" id="listRange" value="${pagination.listRange}" />
 				<input type="hidden" name="b_sort" id="b_sort" value="${ pagination.b_sort }" />
 				<input type="hidden" name="b_searchKeyword" id="b_searchKeyword" value="${ pagination.b_searchKeyword }"/>
 				<input type="hidden" name="b_searchSelect" id="b_searchSelect" value="${ pagination.b_searchSelect }"/>
-			</form>
+			</form> --%>
 			<div class="contentHeader">
 				<c:if test="${ not empty pagination.b_searchKeyword }">
 					<p id="serachInfoText">"<span style="font-weight:bold; color:#424874;">${ pagination.b_searchKeyword }</span>"(으)로 검색한 결과입니다.</p>

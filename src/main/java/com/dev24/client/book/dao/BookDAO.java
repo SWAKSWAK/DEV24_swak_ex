@@ -12,10 +12,6 @@ public interface BookDAO {
 	public int getBookListCnt(BookVO bvo);
 	public BookVO bookDetail(int b_num);
 	
-	//select+sort
-	public List<BookVO> bookBestList(Pagination pagination);
-	public List<BookVO> bookDateList(Pagination pagination);
-	public List<BookVO> bookPriceList(Pagination pagination);
 	
 	//insert
 	public int bookNumber();

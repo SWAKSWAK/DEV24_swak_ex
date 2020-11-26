@@ -50,7 +50,6 @@ public class BookServiceImpl implements BookService {
 	@Override
 	public int bookInsert(BookVO bvo) throws Exception {
 		
-		int result = 0;
 		String listcoverPath = null;
 		String detailcoverPath = null;
 		String detailPath = null;
@@ -60,7 +59,7 @@ public class BookServiceImpl implements BookService {
 		int b_num = bookDAO.bookNumber();
 		bvo.setB_num(b_num);
 
-		result = bookDAO.bookInsert(bvo);
+		bookDAO.bookInsert(bvo);
 
 		MultipartFile listcoverFile = bvo.getListcoverFile();
 		MultipartFile detailcoverFile = bvo.getDetailcoverFile();
@@ -87,7 +86,7 @@ public class BookServiceImpl implements BookService {
 		
 		bookimgDAO.bookImgInsert(bookimgVO);
 
-		return result;
+		return b_num;
 	}
 	
 	@Override

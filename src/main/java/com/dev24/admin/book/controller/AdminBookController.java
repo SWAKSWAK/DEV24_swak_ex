@@ -1,9 +1,11 @@
 package com.dev24.admin.book.controller;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Map;
 
 import org.junit.Test;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -73,8 +75,14 @@ public class AdminBookController {
 		bvo.setCateOne_num(cateOne_num);
 		bvo.setCateTwo_num(cateTwo_num);
 		
-		// Pagination 객체 생성
+
+		//출력할 도서 개수 가져오기
+		bvo.setB_searchKeyword(b_searchKeyword);
+		bvo.setB_searchSelect(b_searchSelect);
+		bvo.setB_stateKeyword("regOrOopOrSoldOut");
 		int bookLength = bookService.getBookListCnt(bvo);
+		
+		//pagination 객체 생성
 		Pagination pagination = new Pagination(bookLength, startPage, page, cateOne_num, cateTwo_num, listRange, b_sort, b_stateKeyword);
 		pagination.setB_searchKeyword(b_searchKeyword);
 		pagination.setB_searchSelect(b_searchSelect);
@@ -108,24 +116,24 @@ public class AdminBookController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value="/bookInsert")
-	public ResponseEntity<String> bookInsert(@ModelAttribute("data") BookVO bvo, Model model) throws Exception {
+	public String bookInsert(@ModelAttribute("data") BookVO bvo, Model model) throws Exception {
 		log.info("bookInsert 호출 성공");
 		log.info("bvo" + bvo);
 		
-		int result = 0;
-		String url = "";
+		int b_num = 0;
+		String URI;
 		
-		result = bookService.bookInsert(bvo);
-		ResponseEntity<String> entity;
+		b_num = bookService.bookInsert(bvo);
 		
-		if(result == 1) {
-			url = "/admin/book/detail/00";
-			entity = new ResponseEntity<String>("redirect:" + url, HttpStatus.OK);
+		if(b_num > 0) {
+			model.addAttribute("msg", "도서가 업로드 되었습니다.\\n등록상태로 전환 후 판매 가능합니다.");
+			model.addAttribute("url", "/admin/book/detail/"+b_num);
 		} else {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+			model.addAttribute("msg", "도서가 업로드가 실패하였습니다.");
+			model.addAttribute("url", "/admin/book/bookInsertForm");
 		}
 		
-		return entity;
+		return "common/redirect";
 	}
 	
 	@PostMapping(value="/updateBookState", produces = "text/plain; charset=utf8")
@@ -196,7 +204,7 @@ public class AdminBookController {
 		result = bookService.bookUpdate(bvo);
 		ResponseEntity<String> entity;
 		
-		return "/admin/book/detail/00";
+		return "redirect:/admin/book/detail/"+bvo.getB_num();
 	}
 	
 }
